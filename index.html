@@ -131,6 +131,9 @@
                 <button class="preset-btn" data-preset="dabo60">达播氧漂</button>
                 
                 <!-- 快速文本预设按钮 -->
+                <button class="preset-btn" data-quick-text="zhujiang-workwear">珠江工衣</button>
+                <button class="preset-btn" data-quick-text="yellow-tablecloth">黄色台布</button>
+                <button class="preset-btn" data-quick-text="yujin">2C浴巾</button>
                 <button class="preset-btn" data-preset="bucaoB">布草被套常规</button>
                 <button class="preset-btn" data-preset="bucaoC">布草床单常规</button>
                 <button class="preset-btn" data-preset="bucaoZ">布草枕套常规</button>
@@ -145,7 +148,7 @@
             <!-- 左侧第一列：洗前保护、预去渍、部位、柔顺 -->
             <div class="lg:col-span-4 space-y-2"></div>
             
-            <!-- 左侧第二列：工业洗涤、家用洗涤、干燥、熨烫 -->
+            <!-- 左侧第二列：洗涤、干燥、熨烫 -->
             <div class="lg:col-span-4 space-y-2"></div>
             
             <!-- 右侧：结果和复制区 -->
@@ -285,7 +288,7 @@
                 ]
             },
             {
-                category: "工业洗涤",
+                category: "洗涤",
                 items: [
                     { value: "60℃氧漂", fullName: "[60氧漂]工业水洗机4号程序", isExclusive: true },
                     { value: "40℃氧漂", fullName: "[40氧漂]工业水洗机14号程序", isExclusive: true },
@@ -297,34 +300,30 @@
                     { value: "40℃羽绒", fullName: "[40羽绒]工业水洗机3号程序", isExclusive: true },
                     { value: "30℃羽绒", fullName: "[30羽绒]工业水洗机15号程序", isExclusive: true },
                     { value: "羽绒-柔和", fullName: "[羽绒-柔和]工业水洗机7号程序", isExclusive: true },
+                    { value: "布草常规18", fullName: "工业水洗机18号程序", isExclusive: true },
                     { value: "湿洗", fullName: "湿洗机5号程序", isExclusive: true },
                     { value: "四氯1号", fullName: "四氯乙烯1号程序", isExclusive: true },
                     { value: "四氯快洗", fullName: "四氯乙烯快洗程序", isExclusive: true },
                     { value: "碳氢1号", fullName: "碳氢1号程序", isExclusive: true },
                     { value: "碳氢快洗", fullName: "碳氢快洗程序", isExclusive: true },
-                    ]
-             },
-            {
-                category: "家用洗涤",
-                items: [
                     { value: "凑机", fullName: "凑机", isExclusive: true },
                     { value: "加急", fullName: "加急", isExclusive: true },
                     { value: "节能", fullName: "节能", isExclusive: true },
-                    { value: "快洗P2", fullName: "家用机速洗P-2", isExclusive: true },
-                    { value: "快洗P3", fullName: "家用机速洗P-3", isExclusive: true },
+                    { value: "家用快洗P2", fullName: "家用机速洗P-2", isExclusive: true },
+                    { value: "家用快洗P3", fullName: "家用机速洗P-3", isExclusive: true },
                     { value: "漂+脱P5", fullName: "家用机漂+脱P-5", isExclusive: true },
-                    { value: "60℃氧漂-加强P-3", fullName: "[60氧漂加强]家用机大物P-3", isExclusive: true },
-                    { value: "60℃氧漂-加强P-5", fullName: "[60氧漂加强]家用机大物P-5", isExclusive: true },
-                    { value: "60℃氧漂P-3", fullName: "[60氧漂]家用机日常P-3", isExclusive: true },
-                    { value: "60℃氧漂P-5", fullName: "[60氧漂]家用机日常P-5", isExclusive: true },
-                    { value: "40℃氧漂P-3", fullName: "[40氧漂]家用机羽绒（加时）P-3", isExclusive: true },
-                    { value: "40℃氧漂P-5", fullName: "[40氧漂]家用机羽绒（加时）P-5", isExclusive: true },
-                    { value: "40℃至尊", fullName: "[40至尊-柔和]家用机羊毛（加时）", isExclusive: true },
-                    { value: "40℃至尊-柔和", fullName: "[40至尊]家用机日常洗", isExclusive: true },
-                    { value: "30℃至尊", fullName: "[30至尊]家用机羽绒", isExclusive: true },
-                    { value: "40℃羽绒P-3", fullName: "[40羽绒]家用机羽绒P-3", isExclusive: true },
-                    { value: "40℃羽绒P-5", fullName: "[40羽绒]家用机羽绒P-5", isExclusive: true },
-                    { value: "30℃羽绒", fullName: "[30羽绒]家用机速洗（加时）", isExclusive: true },
+                    { value: "家用60℃氧漂-加强P-3", fullName: "[60氧漂加强]家用机大物P-3", isExclusive: true },
+                    { value: "家用60℃氧漂-加强P-5", fullName: "[60氧漂加强]家用机大物P-5", isExclusive: true },
+                    { value: "家用60℃氧漂P-3", fullName: "[60氧漂]家用机日常P-3", isExclusive: true },
+                    { value: "家用60℃氧漂P-5", fullName: "[60氧漂]家用机日常P-5", isExclusive: true },
+                    { value: "家用40℃氧漂P-3", fullName: "[40氧漂]家用机羽绒（加时）P-3", isExclusive: true },
+                    { value: "家用40℃氧漂P-5", fullName: "[40氧漂]家用机羽绒（加时）P-5", isExclusive: true },
+                    { value: "家用40℃至尊", fullName: "[40至尊-柔和]家用机羊毛（加时）", isExclusive: true },
+                    { value: "家用40℃至尊-柔和", fullName: "[40至尊]家用机日常洗", isExclusive: true },
+                    { value: "家用30℃至尊", fullName: "[30至尊]家用机羽绒", isExclusive: true },
+                    { value: "家用40℃羽绒P-3", fullName: "[40羽绒]家用机羽绒P-3", isExclusive: true },
+                    { value: "家用40℃羽绒P-5", fullName: "[40羽绒]家用机羽绒P-5", isExclusive: true },
+                    { value: "家用30℃羽绒", fullName: "[30羽绒]家用机速洗（加时）", isExclusive: true },
                     { value: "手洗", fullName: "手洗", isExclusive: true },
                     { value: "拎洗", fullName: "拎洗", isExclusive: true },
                     { value: "揉洗", fullName: "揉洗", isExclusive: true },
@@ -352,11 +351,14 @@
                     { value: "室温平铺", fullName: "室温平铺" },
                     { value: "人像机干", fullName: "人像机鼓风" },
                     { value: "烘干1#", fullName: "烘干机1号程序" },
+                    { value: "烘干7#", fullName: "烘干机7号程序" },
+                    { value: "烘干8#", fullName: "烘干机8号程序" },
+                    { value: "烘干9#", fullName: "烘干机9号程序" },
                     { value: "TCF烘房悬挂", fullName: "烘房A2（+0.5h）→拍打手撕/烘房B3（+0.5h）→拍打手撕" },
                     { value: "TCF进机烘干1", fullName: "烘房A2h→烘干机2号程序/烘房B3h→烘干机2号程序" },
                     { value: "TCF进机烘干2", fullName: "烘干机3号程序→烘干机10号程序（若未干）" },
-                    { value: "TCF烘房平铺", fullName: "TCF烘房平铺→拍打手撕 },
-                    { value: "TCF人像机鼓风", fullName: "TCF人像机鼓风→拍打手撕 },
+                    { value: "TCF烘房平铺", fullName: "TCF烘房平铺→拍打手撕" },
+                    { value: "TCF人像机鼓风", fullName: "TCF人像机鼓风→拍打手撕" },
                 ]
             },
             {
@@ -367,7 +369,7 @@
                     { value: "禁止压烫", fullName: "禁止压烫" },
                     { value: "近距离喷蒸汽", fullName: "近距离（≤10cm）喷蒸汽" },
                     { value: "含皮", fullName: "皮革禁止蒸汽熨烫" },
-                    { value: "含PU", fullName: "PU禁止光面夹机、熨斗直接接触" }
+                    { value: "含PU", fullName: "PU禁止光面夹机、熨斗直接接触" },
                     { value: "含皮毛", fullName: "皮毛禁止蒸汽熨烫" },
                     { value: "深色高光泽真丝/荧光色", fullName: "需试烫" },
                 ]
@@ -380,8 +382,7 @@
             "预去渍": "预去渍内容",
             "预去渍填充服": "预去渍填充服内容",
             "部位": "部位内容",
-            "工业洗涤": "工业洗涤内容",
-            "家用洗涤": "家用洗涤内容",
+            "洗涤": "洗涤内容",
             "柔顺": "柔顺内容",
             "干燥": "干燥内容",
             "熨烫": "熨烫内容"
@@ -390,23 +391,8 @@
         // 程序预设方案
         const presets = {
             "yangpiao60": ["60℃氧漂"],
-            "yangpiao40": ["40℃氧漂"],
-            "zhizun40": ["40℃至尊"],
-            "zhizun30": ["30℃至尊", "烘房悬挂"],
-            "wuroushun30": ["9#", "烘房悬挂"], 
-            "chongfengyi": ["翻面","9#", "烘房悬挂"],
-            "kuaixi": ["快洗", "薰衣草","烘房悬挂"],
-            "silvyixi": ["四氯乙烯"],
-            "xiku": ["翻面", "四氯乙烯"],
-            "ganxiqian": ["干洗前去渍","四氯乙烯"],
-            "ganxiqianfan": ["干洗前去渍","翻面","四氯乙烯"],
-            "tanqing": ["水溶性污渍", "翻面", "细网袋", "碳氢"],
-            "guiji": ["细网袋", "硅基"],
-            "dabo60": ["60℃氧漂", "烘干1#"],
-            "yu40-pao": ["保护拉绳", "保护拉链", "羽绒浸泡","翻","烘干3#"],
-            "yu40": ["保护拉绳", "保护拉链", "40羽绒","翻","烘干3#"],
-            "yu30": ["保护拉绳", "保护拉链", "30羽绒","翻","挂→烘2"],
-            "yu-shi": ["保护拉绳", "保护拉链", "湿洗羽绒","翻","室温悬挂"],            
+            "silvyixi": ["四氯1号"],
+            "dabo60": ["60℃氧漂", "烘干1#"],        
             "bucaoB": ["布草常规18","烘干7#"],
             "bucaoC": ["布草常规18","烘干8#"],
             "bucaoZ": ["布草常规18","烘干9#"],
@@ -463,7 +449,7 @@
         function renderProcessButtons() {
             // 定义两列分别包含的分类
             const column1Categories = ["洗前保护", "预去渍","预去渍填充服", "部位", "柔顺"];
-            const column2Categories = ["工业洗涤", "家用洗涤","干燥", "熨烫"];
+            const column2Categories = ["洗涤","干燥", "熨烫"];
 
             processes.forEach((process) => {
                 const card = document.createElement('div');
@@ -530,7 +516,7 @@
             const hasEditedContent = resultText.dataset.userEdited === 'true' && resultText.value.trim() !== '';
             
             // 处理互斥选项（洗涤和柔顺剂）
-            if ((category === "工业洗涤" || category === "柔顺") && btn.dataset.isExclusive === "true") {
+            if ((category === "洗涤" || category === "柔顺") && btn.dataset.isExclusive === "true") {
                 // 取消该分类下所有其他互斥项的选择状态
                 const allButtons = document.querySelectorAll(`button[data-category="${category}"][data-is-exclusive="true"]`);
                 allButtons.forEach(button => {
@@ -748,7 +734,7 @@
             if (resultText.dataset.quickText) return;
             
             // 按类别收集内容（严格按照工序顺序）
-            const categoryOrder = ["洗前保护", "预去渍","预去渍填充服", "工业洗涤", "家用洗涤","柔顺", "干燥", "熨烫"];
+            const categoryOrder = ["洗前保护", "预去渍","预去渍填充服", "洗涤","柔顺", "干燥", "熨烫"];
             let hasStains = false;
             
             // 1. 先处理部位（污渍）- 只用于填充占位符，不单独显示

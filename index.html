@@ -115,7 +115,6 @@
         <!-- 标题区域 -->
         <header class="text-center mb-4">
             <h1 class="text-[clamp(1.5rem,3vw,2rem)] font-bold text-gray-800 mb-2">定案词条点选系统V1.0</h1>
-            <p class="text-neutral text-sm">蒸烫湿烫和衬衣的袖线西裤的裤线不用写了</p>
         </header>
         
         <!-- 预设按钮区域 -->
@@ -464,7 +463,7 @@
         function renderProcessButtons() {
             // 定义两列分别包含的分类
             const column1Categories = ["洗前保护", "预去渍","预去渍填充服", "部位", "柔顺"];
-            const column2Categories = ["洗涤", "干燥", "熨烫"];
+            const column2Categories = ["工业洗涤", "家用洗涤","干燥", "熨烫"];
 
             processes.forEach((process) => {
                 const card = document.createElement('div');
@@ -531,7 +530,7 @@
             const hasEditedContent = resultText.dataset.userEdited === 'true' && resultText.value.trim() !== '';
             
             // 处理互斥选项（洗涤和柔顺剂）
-            if ((category === "洗涤" || category === "柔顺") && btn.dataset.isExclusive === "true") {
+            if ((category === "工业洗涤" || category === "柔顺") && btn.dataset.isExclusive === "true") {
                 // 取消该分类下所有其他互斥项的选择状态
                 const allButtons = document.querySelectorAll(`button[data-category="${category}"][data-is-exclusive="true"]`);
                 allButtons.forEach(button => {

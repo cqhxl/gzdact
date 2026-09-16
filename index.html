@@ -128,7 +128,7 @@
                 <button class="yellow-preset-btn" data-preset="silvyixi">四氯乙烯</button>
                 
                 <!-- 蓝绿色系羽绒预设按钮 -->
-                <button class="preset-btn" data-preset="dabo60">达播氧漂</button>
+                <button class="preset-btn" data-preset="dabo60">达播/直播物料氧漂</button>
                 
                 <!-- 快速文本预设按钮 -->
                 <button class="preset-btn" data-quick-text="zhujiang-workwear">珠江工衣</button>
@@ -178,13 +178,13 @@
                         </button>
                     </div>
                     
-                    <!-- 新增主体/内胆选择按钮 -->
+                    <!-- 新增主体/可拆组件选择按钮 -->
                     <div class="flex gap-2 mb-2">
                         <button id="mainBodyBtn" class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 py-2 px-3 rounded-lg font-medium btn-hover flex items-center justify-center text-sm transition-all duration-200">
                             <i class="fa fa-square-o mr-1"></i> 主体
                         </button>
                         <button id="innerLiningBtn" class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 py-2 px-3 rounded-lg font-medium btn-hover flex items-center justify-center text-sm transition-all duration-200">
-                            <i class="fa fa-square-o mr-1"></i> 内胆
+                            <i class="fa fa-square-o mr-1"></i> 可拆组件
                         </button>
                     </div>
 
@@ -284,12 +284,15 @@
                     { value: "局部喷", fullName: "局部喷", isStain: true },
                     { value: "浸脱", fullName: "浸脱", isStain: true },
                     { value: "整体涂", fullName: "浸脱", isStain: true },
-                    { value: "局部图", fullName: "浸脱", isStain: true }
+                    { value: "局部涂", fullName: "浸脱", isStain: true }
                 ]
             },
             {
                 category: "洗涤",
                 items: [
+                    { value: "凑机", fullName: "凑机", isExclusive: true },
+                    { value: "加急", fullName: "加急", isExclusive: true },
+                    { value: "节能", fullName: "节能", isExclusive: true },
                     { value: "60℃氧漂", fullName: "[60氧漂]工业水洗机4号程序", isExclusive: true },
                     { value: "40℃氧漂", fullName: "[40氧漂]工业水洗机14号程序", isExclusive: true },
                     { value: "40℃至尊", fullName: "[40至尊]工业水洗机13号程序", isExclusive: true },
@@ -306,9 +309,6 @@
                     { value: "四氯快洗", fullName: "四氯乙烯快洗程序", isExclusive: true },
                     { value: "碳氢1号", fullName: "碳氢1号程序", isExclusive: true },
                     { value: "碳氢快洗", fullName: "碳氢快洗程序", isExclusive: true },
-                    { value: "凑机", fullName: "凑机", isExclusive: true },
-                    { value: "加急", fullName: "加急", isExclusive: true },
-                    { value: "节能", fullName: "节能", isExclusive: true },
                     { value: "家用快洗P2", fullName: "家用机速洗P-2", isExclusive: true },
                     { value: "家用快洗P3", fullName: "家用机速洗P-3", isExclusive: true },
                     { value: "漂+脱P5", fullName: "家用机漂+脱P-5", isExclusive: true },
@@ -350,7 +350,6 @@
                     { value: "室温悬挂", fullName: "室温悬挂" },
                     { value: "室温平铺", fullName: "室温平铺" },
                     { value: "人像机干", fullName: "人像机鼓风" },
-                    { value: "烘干1#", fullName: "烘干机1号程序" },
                     { value: "烘干7#", fullName: "烘干机7号程序" },
                     { value: "烘干8#", fullName: "烘干机8号程序" },
                     { value: "烘干9#", fullName: "烘干机9号程序" },
@@ -392,7 +391,7 @@
         const presets = {
             "yangpiao60": ["60℃氧漂"],
             "silvyixi": ["四氯1号"],
-            "dabo60": ["60℃氧漂", "烘干1#"],        
+            "dabo60": ["60℃氧漂"],        
             "bucaoB": ["布草常规18","烘干7#"],
             "bucaoC": ["布草常规18","烘干8#"],
             "bucaoZ": ["布草常规18","烘干9#"],
@@ -403,8 +402,8 @@
 
         // 快速文本预设
         const quickTexts = {
-            "zhujiang-workwear": "工业水洗机12号程序（注：不可用⑦号工业机），烘干机1号程序，蒸烫",
-            "yellow-tablecloth": "工业水洗机4号程序。烘干机1号程序，单滚熨烫+熨烫台修褶皱",
+            "zhujiang-workwear": "工业水洗机12号程序（注：不可用⑦号工业机）",
+            "yellow-tablecloth": "工业水洗机4号程序。单滚熨烫+熨烫台修褶皱",
             "yujin": "洗前测量蓬松度和尺寸。神器涂黄渍部位，放置5分钟，搓洗，用2升60度的热水+1包蓝色月光色渍净+1泵除菌去味至尊整体浸泡1小时。使用标准洗（漂洗次数4次）+1/4瓶盖薰衣草香柔顺剂。 滚筒烘干机5号程序干燥（60度热风40分钟+5分钟冷风） 按需修饰钱头、毛球等。绒面夹机蒸烫(蒸烫过程嗅闻检查有无异味或洗涤剂残留味道，如有联系产线长处理）熨烫后放烘房悬挂散潮30分钟（散潮时间不低于10分钟）复核蓬松度后终检 终检后平铺包装桌面1小时（平铺放置时间不低于1小时） 折叠包装出库"
         };
 
@@ -659,7 +658,7 @@
             }, 2000);
         }
 
-        // 重置前缀选择状态（主体/内胆）
+        // 重置前缀选择状态（主体/可拆组件）
         function resetPrefixSelection() {
             currentPrefix = '';
             // 重置主体按钮样式
@@ -667,10 +666,10 @@
             mainBodyBtn.classList.add('bg-gray-100', 'text-gray-700');
             mainBodyBtn.innerHTML = '<i class="fa fa-square-o mr-1"></i> 主体';
             
-            // 重置内胆按钮样式
+            // 重置可拆组件按钮样式
             innerLiningBtn.classList.remove('bg-primary', 'text-white');
             innerLiningBtn.classList.add('bg-gray-100', 'text-gray-700');
-            innerLiningBtn.innerHTML = '<i class="fa fa-square-o mr-1"></i> 内胆';
+            innerLiningBtn.innerHTML = '<i class="fa fa-square-o mr-1"></i> 可拆组件';
         }
 
         // 清空所有选择
@@ -689,7 +688,7 @@
                 btn.classList.remove('selected-btn');
             });
             
-            // 重置主体/内胆选择状态
+            // 重置主体/可拆组件选择状态
             resetPrefixSelection();
             
             updateResult();
@@ -798,7 +797,7 @@
                 newContent = newContent ? `${newContent}，${wetDryContent}` : wetDryContent;
             }
             
-            // 7. 添加前缀（主体/内胆）
+            // 7. 添加前缀（主体/可拆组件）
             if (currentPrefix && newContent) {
                 newContent = `${currentPrefix}：${newContent}`;
             }
@@ -834,34 +833,34 @@
                     mainBodyBtn.classList.add('bg-gray-100', 'text-gray-700');
                     mainBodyBtn.innerHTML = '<i class="fa fa-square-o mr-1"></i> 主体';
                 } else {
-                    // 选择主体，取消内胆选择
+                    // 选择主体，取消可拆组件选择
                     currentPrefix = '主体';
                     mainBodyBtn.classList.remove('bg-gray-100', 'text-gray-700');
                     mainBodyBtn.classList.add('bg-primary', 'text-white');
                     mainBodyBtn.innerHTML = '<i class="fa fa-check-square-o mr-1"></i> 主体';
                     
-                    // 取消内胆选择
+                    // 取消可拆组件选择
                     innerLiningBtn.classList.remove('bg-primary', 'text-white');
                     innerLiningBtn.classList.add('bg-gray-100', 'text-gray-700');
-                    innerLiningBtn.innerHTML = '<i class="fa fa-square-o mr-1"></i> 内胆';
+                    innerLiningBtn.innerHTML = '<i class="fa fa-square-o mr-1"></i> 可拆组件';
                 }
                 updateResult();
             });
             
             innerLiningBtn.addEventListener('click', () => {
-                // 切换内胆按钮状态
-                if (currentPrefix === '内胆') {
-                    // 如果已选中内胆，则取消选择
+                // 切换可拆组件按钮状态
+                if (currentPrefix === '可拆组件') {
+                    // 如果已选中可拆组件，则取消选择
                     currentPrefix = '';
                     innerLiningBtn.classList.remove('bg-primary', 'text-white');
                     innerLiningBtn.classList.add('bg-gray-100', 'text-gray-700');
-                    innerLiningBtn.innerHTML = '<i class="fa fa-square-o mr-1"></i> 内胆';
+                    innerLiningBtn.innerHTML = '<i class="fa fa-square-o mr-1"></i> 可拆组件';
                 } else {
-                    // 选择内胆，取消主体选择
-                    currentPrefix = '内胆';
+                    // 选择可拆组件，取消主体选择
+                    currentPrefix = '可拆组件';
                     innerLiningBtn.classList.remove('bg-gray-100', 'text-gray-700');
                     innerLiningBtn.classList.add('bg-primary', 'text-white');
-                    innerLiningBtn.innerHTML = '<i class="fa fa-check-square-o mr-1"></i> 内胆';
+                    innerLiningBtn.innerHTML = '<i class="fa fa-check-square-o mr-1"></i> 可拆组件';
                     
                     // 取消主体选择
                     mainBodyBtn.classList.remove('bg-primary', 'text-white');

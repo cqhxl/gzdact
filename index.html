@@ -1,949 +1,968 @@
-
-
-
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>定案词条点选系统</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdn.tailwindcss.com?plugins=forms" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
-    
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        primary: '#3B82F6',
-                        secondary: '#10B981',
-                        neutral: '#64748B',
-                        yellow: {
-                            light: '#FEF3C7',
-                            DEFAULT: '#EAB308',
-                            dark: '#B45309'
-                        },
-                        teal: {
-                            light: '#CCFBF1',
-                            DEFAULT: '#14B8A6',
-                            dark: '#0F766E'
-                        }
-                    },
-                    fontFamily: {
-                        inter: ['Inter', 'system-ui', 'sans-serif'],
-                    },
-                }
-            }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>定案词条点选系统</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdn.tailwindcss.com?plugins=forms" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#3B82F6',
+            secondary: '#10B981',
+            neutral: '#64748B',
+            yellow: { light: '#FEF3C7', DEFAULT: '#EAB308', dark: '#B45309' },
+            teal: { light: '#CCFBF1', DEFAULT: '#14B8A6', dark: '#0F766E' }
+          },
+          fontFamily: {
+            inter: ['Inter', 'system-ui', 'sans-serif'],
+          },
         }
-    </script>
-    
-    <style type="text/tailwindcss">
-        @layer utilities {
-            .btn-hover {
-                @apply transition-all duration-200 hover:shadow-md hover:-translate-y-0.5;
-            }
-            .category-card {
-                @apply bg-white rounded-xl shadow-sm border border-gray-100 p-4 mb-4 transition-all duration-200 hover:shadow-md;
-            }
-            .column1-card {
-                @apply bg-white rounded-xl shadow-sm border border-gray-100 p-3 mb-3 transition-all duration-200 hover:shadow-md;
-            }
-            .selected-btn {
-                @apply bg-primary text-white border-primary shadow-sm;
-            }
-            .preset-btn {
-                @apply bg-blue-50 hover:bg-blue-100 text-primary py-2 px-4 rounded-lg font-medium btn-hover text-sm border border-blue-200;
-            }
-            .yellow-preset-btn {
-                @apply bg-yellow-light hover:bg-yellow text-yellow-dark py-2 px-4 rounded-lg font-medium btn-hover text-sm border border-yellow-dark/20;
-            }
-            .teal-preset-btn {
-                @apply bg-teal-light hover:bg-teal text-teal-dark py-2 px-4 rounded-lg font-medium btn-hover text-sm border border-teal/20;
-            }
-            .process-btn {
-                @apply px-3 py-2 border border-gray-200 rounded-lg text-sm hover:border-primary hover:bg-blue-50 btn-hover transition-all duration-200;
-            }
-            .tag-1hao {
-                @apply px-3 py-2 border border-yellow-200 bg-yellow-50 rounded-lg text-sm hover:border-yellow-400 btn-hover transition-all duration-200 text-yellow-800;
-            }
-            .tag-1hao.selected-btn {
-                @apply bg-yellow-400 text-white border-yellow-500;
-            }
-            .tag-pentu {
-                @apply px-3 py-2 border border-blue-200 bg-blue-50 rounded-lg text-sm hover:border-blue-400 btn-hover transition-all duration-200 text-blue-800;
-            }
-            .tag-pentu.selected-btn {
-                @apply bg-blue-400 text-white border-blue-500;
-            }
-            .tag-zaoxuan {
-                @apply px-3 py-2 border border-green-200 bg-green-50 rounded-lg text-sm hover:border-green-400 btn-hover transition-all duration-200 text-green-800;
-            }
-            .tag-zaoxuan.selected-btn {
-                @apply bg-green-500 text-white border-green-600;
-            }
-            .tag-chlori {
-                @apply px-3 py-2 border border-gray-300 bg-gray-100 rounded-lg text-sm hover:border-gray-500 btn-hover transition-all duration-200 text-gray-700;
-            }
-            .tag-chlori.selected-btn {
-                @apply bg-gray-500 text-white border-gray-600;
-            }
-            .home-switch-btn {
-                @apply px-3 py-2 border-2 border-indigo-300 bg-indigo-50 rounded-lg text-sm font-semibold hover:border-indigo-500 btn-hover transition-all duration-200 text-indigo-700;
-            }
-            .home-switch-btn.selected-btn {
-                @apply bg-indigo-500 text-white border-indigo-600;
-            }
-            .teal-border-btn {
-                @apply px-3 py-2 border border-teal rounded-lg text-sm hover:border-teal-dark btn-hover transition-all duration-200 text-teal-dark;
-            }
-            .teal-border-btn.selected-btn {
-                @apply bg-teal text-white border-teal;
-            }
-            .dark-yellow-border-btn {
-                @apply px-3 py-2 border border-yellow-dark rounded-lg text-sm hover:border-yellow btn-hover transition-all duration-200;
-            }
-            .dark-yellow-border-btn.selected-btn {
-                @apply bg-yellow text-white border-yellow;
-            }
-            .adaptive-textarea {
-                @apply w-full p-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-all resize-none text-base;
-                min-height: 100px;
-                max-height: 400px;
-                line-height: 1.6;
-            }
-            .stain-btn {
-                @apply process-btn border-orange-200 text-orange-800 hover:border-orange-400 hover:bg-orange-50;
-            }
-            .stain-btn.selected-btn {
-                @apply bg-orange-500 text-white border-orange-500;
-            }
-            .edited-highlight {
-                @apply bg-yellow-50 border border-yellow-200;
-            }
-            .dry-wet-btn {
-                @apply px-3 py-2 border border-purple-200 rounded-lg text-sm hover:border-purple-400 hover:bg-purple-50 btn-hover transition-all duration-200 text-purple-700;
-            }
-            .dry-wet-btn.selected-btn {
-                @apply bg-purple-500 text-white border-purple-500;
-            }
-            .wet-dry-btn {
-                @apply px-3 py-2 border border-blue-200 rounded-lg text-sm hover:border-blue-400 hover:bg-blue-50 btn-hover transition-all duration-200 text-blue-700;
-            }
-            .wet-dry-btn.selected-btn {
-                @apply bg-blue-500 text-white border-blue-500;
-            }
-        }
-    </style>
+      }
+    }
+  </script>
+  <style type="text/tailwindcss">
+    @layer utilities {
+      .btn-hover {
+        @apply transition-all duration-200 hover:shadow-md hover:-translate-y-0.5;
+      }
+      .category-card {
+        @apply bg-white rounded-xl shadow-sm border border-gray-100 p-4 mb-4 transition-all duration-200 hover:shadow-md;
+      }
+      .column1-card {
+        @apply bg-white rounded-xl shadow-sm border border-gray-100 p-3 mb-3 transition-all duration-200 hover:shadow-md;
+      }
+      .selected-btn {
+        @apply bg-primary text-white border-primary shadow-sm;
+      }
+      .preset-btn {
+        @apply bg-blue-50 hover:bg-blue-100 text-primary py-2 px-4 rounded-lg font-medium btn-hover text-sm border border-blue-200;
+      }
+      .preset-green-btn {
+        @apply bg-green-100 hover:bg-green-200 text-green-900 py-2 px-4 rounded-lg font-medium btn-hover text-sm border border-green-300;
+      }
+      .yellow-preset-btn {
+        @apply bg-yellow-light hover:bg-yellow text-yellow-dark py-2 px-4 rounded-lg font-medium btn-hover text-sm border border-yellow-dark/20;
+      }
+      .teal-preset-btn {
+        @apply bg-teal-light hover:bg-teal text-teal-dark py-2 px-4 rounded-lg font-medium btn-hover text-sm border border-teal/20;
+      }
+      .process-btn {
+        @apply px-3 py-2 border border-gray-200 rounded-lg text-sm hover:border-primary hover:bg-blue-50 btn-hover transition-all duration-200;
+      }
+      .tag-1hao {
+        @apply px-3 py-2 border border-yellow-200 bg-yellow-50 rounded-lg text-sm hover:border-yellow-400 btn-hover transition-all duration-200 text-yellow-800;
+      }
+      .tag-1hao.selected-btn {
+        @apply bg-yellow-400 text-white border-yellow-500;
+      }
+      .tag-pentu {
+        @apply px-3 py-2 border border-blue-200 bg-blue-50 rounded-lg text-sm hover:border-blue-400 btn-hover transition-all duration-200 text-blue-800;
+      }
+      .tag-pentu.selected-btn {
+        @apply bg-blue-400 text-white border-blue-500;
+      }
+      .tag-zaoxuan {
+        @apply px-3 py-2 border border-green-200 bg-green-50 rounded-lg text-sm hover:border-green-400 btn-hover transition-all duration-200 text-green-800;
+      }
+      .tag-zaoxuan.selected-btn {
+        @apply bg-green-500 text-white border-green-600;
+      }
+      .tag-chlori {
+        @apply px-3 py-2 border border-gray-300 bg-gray-100 rounded-lg text-sm hover:border-gray-500 btn-hover transition-all duration-200 text-gray-700;
+      }
+      .tag-chlori.selected-btn {
+        @apply bg-gray-500 text-white border-gray-600;
+      }
+      .tag-xinlan {
+        @apply px-3 py-2 border border-blue-200 bg-blue-100 rounded-lg text-sm hover:border-blue-400 btn-hover transition-all duration-200 text-blue-800;
+      }
+      .tag-xinlan.selected-btn {
+        @apply bg-blue-400 text-white border-blue-500;
+      }
+      .home-switch-btn {
+        @apply px-3 py-2 border-2 border-indigo-300 bg-indigo-50 rounded-lg text-sm font-semibold hover:border-indigo-500 btn-hover transition-all duration-200 text-indigo-700;
+      }
+      .home-switch-btn.selected-btn {
+        @apply bg-indigo-500 text-white border-indigo-600;
+      }
+      .teal-border-btn {
+        @apply px-3 py-2 border border-teal rounded-lg text-sm hover:border-teal-dark btn-hover transition-all duration-200 text-teal-dark;
+      }
+      .teal-border-btn.selected-btn {
+        @apply bg-teal text-white border-teal;
+      }
+      .dark-yellow-border-btn {
+        @apply px-3 py-2 border border-yellow-dark rounded-lg text-sm hover:border-yellow btn-hover transition-all duration-200;
+      }
+      .dark-yellow-border-btn.selected-btn {
+        @apply bg-yellow text-white border-yellow;
+      }
+      .adaptive-textarea {
+        @apply w-full p-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-all resize-none text-base;
+        min-height: 100px;
+        max-height: 400px;
+        line-height: 1.6;
+      }
+      .stain-btn {
+        @apply process-btn border-orange-200 text-orange-800 hover:border-orange-400 hover:bg-orange-50;
+      }
+      .stain-btn.selected-btn {
+        @apply bg-orange-500 text-white border-orange-500;
+      }
+      .edited-highlight {
+        @apply bg-yellow-50 border border-yellow-200;
+      }
+      .dry-wet-btn {
+        @apply px-3 py-2 border border-purple-200 rounded-lg text-sm hover:border-purple-400 hover:bg-purple-50 btn-hover transition-all duration-200 text-purple-700;
+      }
+      .dry-wet-btn.selected-btn {
+        @apply bg-purple-500 text-white border-purple-500;
+      }
+      .wet-dry-btn {
+        @apply px-3 py-2 border border-blue-200 rounded-lg text-sm hover:border-blue-400 hover:bg-blue-50 btn-hover transition-all duration-200 text-blue-700;
+      }
+      .wet-dry-btn.selected-btn {
+        @apply bg-blue-500 text-white border-blue-500;
+      }
+    }
+  </style>
 </head>
 <body class="bg-gray-50 font-inter text-gray-800 min-h-screen">
-    <div class="container mx-auto px-4 py-5 max-w-[100%] lg:max-w-[95%] xl:max-w-[90%]">
-        <header class="text-center mb-5">
-            <h1 class="text-[clamp(1.5rem,3vw,2rem)] font-bold text-gray-800 mb-1">定案词条点选系统V1.0</h1>
-            <p class="text-sm text-gray-500">点击词条自动生成定案文案</p>
-        </header>
-        
-        <div class="mb-5 bg-white rounded-xl shadow-sm border border-gray-100 p-4">
-            <h3 class="font-semibold mb-3 text-gray-700 text-sm flex items-center">
-                <i class="fa fa-bolt text-yellow-500 mr-2"></i>快速预设
+  <div class="container mx-auto px-4 py-5 max-w-[100%] lg:max-w-[95%] xl:max-w-[90%]">
+    <header class="text-center mb-5">
+      <h1 class="text-[clamp(1.5rem,3vw,2rem)] font-bold text-gray-800 mb-1">定案词条点选系统V1.0</h1>
+      <p class="text-sm text-gray-500">点击词条自动生成定案文案</p>
+    </header>
+    <div class="mb-5 bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+      <h3 class="font-semibold mb-3 text-gray-700 text-sm flex items-center">
+        <i class="fa fa-bolt text-yellow-500 mr-2"></i>快速预设
+      </h3>
+      <div class="flex flex-wrap gap-2">
+        <button class="preset-btn" data-preset="dabo60">达播/直播物料氧漂</button>
+        <button class="preset-btn" data-preset="bucaoB">布草被套常规</button>
+        <button class="preset-btn" data-preset="bucaoC">布草床单常规</button>
+        <button class="preset-btn" data-preset="bucaoZ">布草枕套常规</button>
+        <button class="preset-btn" data-preset="bucaoyangB">布草被套氧漂</button>
+        <button class="preset-btn" data-preset="bucaoyangC">布草床单氧漂</button>
+        <button class="preset-btn" data-preset="bucaoyangZ">布草枕套氧漂</button>
+        <button class="preset-btn" data-quick-text="yujin">浴巾常用</button>
+        <button class="preset-btn preset-green-btn" data-preset="kuaixi">快洗</button>
+      </div>
+    </div>
+    <main class="grid grid-cols-1 lg:grid-cols-12 gap-4">
+      <div class="lg:col-span-4 space-y-2"></div>
+      <div class="lg:col-span-4 space-y-2"></div>
+      <div class="lg:col-span-4">
+        <div class="category-card sticky top-4 p-4">
+          <h2 class="text-base font-semibold mb-3 flex items-center text-gray-700">
+            <i class="fa fa-list-alt text-primary mr-2"></i>生成结果（可编辑）
+          </h2>
+          <div class="mb-3">
+            <textarea id="resultText" class="adaptive-textarea" placeholder="选择工序后显示文字，您可以直接在此编辑..."></textarea>
+            <div class="text-right text-xs text-neutral mt-1">
+              <span id="charCount">0</span> 字符
+              <span id="editTip" class="ml-2 hidden text-orange-600">
+                <i class="fa fa-info-circle mr-0.5"></i>点选新工序将重置编辑内容
+              </span>
+            </div>
+          </div>
+          <div class="flex gap-2 mb-3">
+            <button id="copyBtn" class="flex-1 bg-primary hover:bg-primary/90 text-white py-2.5 px-3 rounded-lg font-medium btn-hover flex items-center justify-center text-sm disabled:opacity-50 disabled:cursor-not-allowed shadow-sm">
+              <i class="fa fa-copy mr-1"></i> 复制
+            </button>
+            <button id="clearBtn" class="bg-gray-100 hover:bg-gray-200 text-gray-700 py-2.5 px-4 rounded-lg font-medium btn-hover flex items-center justify-center text-sm disabled:opacity-50 disabled:cursor-not-allowed">
+              <i class="fa fa-trash mr-1"></i> 清空
+            </button>
+          </div>
+          <div class="flex gap-2 mb-3">
+            <button id="mainBodyBtn" class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 py-2.5 px-3 rounded-lg font-medium btn-hover flex items-center justify-center text-sm transition-all duration-200">
+              <i class="fa fa-square-o mr-1"></i> 主体
+            </button>
+            <button id="innerLiningBtn" class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 py-2.5 px-3 rounded-lg font-medium btn-hover flex items-center justify-center text-sm transition-all duration-200">
+              <i class="fa fa-square-o mr-1"></i> 可拆组件
+            </button>
+          </div>
+          <div class="mb-3 p-3 bg-purple-50 rounded-lg">
+            <h3 class="text-sm font-semibold mb-2 flex items-center text-purple-700">
+              <i class="fa fa-exchange text-purple-500 mr-1"></i>干转水
             </h3>
             <div class="flex flex-wrap gap-2">
-                <button class="preset-btn" data-preset="dabo60">达播/直播物料氧漂</button>
-                <button class="preset-btn" data-preset="bucaoB">布草被套常规</button>
-                <button class="preset-btn" data-preset="bucaoC">布草床单常规</button>
-                <button class="preset-btn" data-preset="bucaoZ">布草枕套常规</button>
-                <button class="preset-btn" data-preset="bucaoyangB">布草被套氧漂</button>
-                <button class="preset-btn" data-preset="bucaoyangC">布草床单氧漂</button>
-                <button class="preset-btn" data-preset="bucaoyangZ">布草枕套氧漂</button>
-                <button class="preset-btn" data-quick-text="yujin">浴巾常用</button>
+              <button class="dry-wet-btn" data-dry-wet="污渍限制">污渍限制</button>
+              <button class="dry-wet-btn" data-dry-wet="材质限制">材质限制</button>
+              <button class="dry-wet-btn" data-dry-wet="颜色限制">颜色限制</button>
+              <button class="dry-wet-btn" data-dry-wet="类型限制">类型限制</button>
+              <button class="dry-wet-btn" data-dry-wet="风格限制">风格限制</button>
             </div>
+          </div>
+          <div class="mb-3 p-3 bg-blue-50 rounded-lg">
+            <h3 class="text-sm font-semibold mb-2 flex items-center text-blue-700">
+              <i class="fa fa-exchange text-blue-500 mr-1"></i>套装
+            </h3>
+            <div class="flex flex-wrap gap-2">
+              <button class="wet-dry-btn" data-wet-dry="套件备注">套件备注</button>
+            </div>
+          </div>
+          <div id="testWarning" class="hidden mb-3 p-3 rounded-lg bg-yellow-50 border border-yellow-200 text-yellow-800 text-xs flex items-center">
+            <i class="fa fa-exclamation-triangle mr-2"></i>洗前测试需同时选择试剂、方法、结果三项
+          </div>
+          <div id="copyMessage" class="hidden mt-1.5 p-2 rounded-lg text-center text-xs font-medium"></div>
         </div>
-        
-        <main class="grid grid-cols-1 lg:grid-cols-12 gap-4">
-            <div class="lg:col-span-4 space-y-2"></div>
-            <div class="lg:col-span-4 space-y-2"></div>
-            <div class="lg:col-span-4">
-                <div class="category-card sticky top-4 p-4">
-                    <h2 class="text-base font-semibold mb-3 flex items-center text-gray-700">
-                        <i class="fa fa-list-alt text-primary mr-2"></i>生成结果（可编辑）
-                    </h2>
-                    <div class="mb-3">
-                        <textarea id="resultText" class="adaptive-textarea" placeholder="选择工序后显示文字，您可以直接在此编辑..."></textarea>
-                        <div class="text-right text-xs text-neutral mt-1">
-                            <span id="charCount">0</span> 字符
-                            <span id="editTip" class="ml-2 hidden text-orange-600">
-                                <i class="fa fa-info-circle mr-0.5"></i>点选新工序将重置编辑内容
-                            </span>
-                        </div>
-                    </div>
-                    <div class="flex gap-2 mb-3">
-                        <button id="copyBtn" class="flex-1 bg-primary hover:bg-primary/90 text-white py-2.5 px-3 rounded-lg font-medium btn-hover flex items-center justify-center text-sm disabled:opacity-50 disabled:cursor-not-allowed shadow-sm">
-                            <i class="fa fa-copy mr-1"></i> 复制
-                        </button>
-                        <button id="clearBtn" class="bg-gray-100 hover:bg-gray-200 text-gray-700 py-2.5 px-4 rounded-lg font-medium btn-hover flex items-center justify-center text-sm disabled:opacity-50 disabled:cursor-not-allowed">
-                            <i class="fa fa-trash mr-1"></i> 清空
-                        </button>
-                    </div>
-                    <div class="flex gap-2 mb-3">
-                        <button id="mainBodyBtn" class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 py-2.5 px-3 rounded-lg font-medium btn-hover flex items-center justify-center text-sm transition-all duration-200">
-                            <i class="fa fa-square-o mr-1"></i> 主体
-                        </button>
-                        <button id="innerLiningBtn" class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 py-2.5 px-3 rounded-lg font-medium btn-hover flex items-center justify-center text-sm transition-all duration-200">
-                            <i class="fa fa-square-o mr-1"></i> 可拆组件
-                        </button>
-                    </div>
-                    <div class="mb-3 p-3 bg-purple-50 rounded-lg">
-                        <h3 class="text-sm font-semibold mb-2 flex items-center text-purple-700">
-                            <i class="fa fa-exchange text-purple-500 mr-1"></i>干转水
-                        </h3>
-                        <div class="flex flex-wrap gap-2">
-                            <button class="dry-wet-btn" data-dry-wet="污渍限制">污渍限制</button>
-                            <button class="dry-wet-btn" data-dry-wet="材质限制">材质限制</button>
-                            <button class="dry-wet-btn" data-dry-wet="颜色限制">颜色限制</button>
-                            <button class="dry-wet-btn" data-dry-wet="类型限制">类型限制</button>
-                            <button class="dry-wet-btn" data-dry-wet="风格限制">风格限制</button>
-                        </div>
-                    </div>
-                    <div class="mb-3 p-3 bg-blue-50 rounded-lg">
-                        <h3 class="text-sm font-semibold mb-2 flex items-center text-blue-700">
-                            <i class="fa fa-exchange text-blue-500 mr-1"></i>套装
-                        </h3>
-                        <div class="flex flex-wrap gap-2">
-                            <button class="wet-dry-btn" data-wet-dry="套件备注">套件备注</button>
-                        </div>
-                    </div>
-                    <div id="testWarning" class="hidden mb-3 p-3 rounded-lg bg-yellow-50 border border-yellow-200 text-yellow-800 text-xs flex items-center">
-                        <i class="fa fa-exclamation-triangle mr-2"></i>洗前测试需同时选择试剂、方法、结果三项
-                    </div>
-                    <div id="copyMessage" class="hidden mt-1.5 p-2 rounded-lg text-center text-xs font-medium"></div>
-                </div>
-            </div>
-        </main>
-    </div>
-    <script>
-        const extraWashOptions = ["凑机", "加急"];
-        const testCategories = ["洗前测试-试剂", "洗前测试-方法", "洗前测试-结果"];
-        
-        const industrialToHomeMap = {
-            "60℃氧漂": "[60氧漂]家用机日常P-3/[60氧漂]家用机日常P-5",
-            "40℃氧漂": "[40氧漂]家用机羽绒（加时）P-3/[40氧漂]家用机羽绒（加时）P-5",
-            "40℃至尊": "[40至尊]家用机日常洗（加时）",
-            "30℃至尊": "[30至尊]家用机羽绒",
-            "40℃至尊-柔和": "[40至尊-柔和]家用机羊毛（加时）",
-            "羽绒服30℃": "[30至尊]家用机速洗（加时）",
-            "羽绒服40℃": "[40羽绒]家用机羽绒P-3/[40羽绒]家用机羽绒P-5"
-        };
-        
-        const processes = [
-            {
-                category: "洗前测试-试剂",
-                items: [
-                    { value: "清水", fullName: "清水", isExclusive: true },
-                    { value: "神器", fullName: "神器", isExclusive: true },
-                    { value: "至尊原液", fullName: "至尊原液", isExclusive: true },
-                    { value: "至尊稀释液", fullName: "至尊稀释液", isExclusive: true },
-                    { value: "喷涂剂", fullName: "喷涂剂", isExclusive: true },
-                    { value: "彩+衣", fullName: "彩+衣", isExclusive: true },
-                    { value: "喷涂剂+彩漂粉", fullName: "喷涂剂+彩漂粉", isExclusive: true },
-                    { value: "四氯乙烯", fullName: "四氯乙烯", isExclusive: true },
-                    { value: "碳氢", fullName: "碳氢", isExclusive: true },
-                ]
-            },
-            {
-                category: "洗前测试-方法",
-                items: [
-                    { value: "常温", fullName: "常温", isExclusive: true },
-                    { value: "高温", fullName: "高温", isExclusive: true },
-                ]
-            },
-            {
-                category: "洗前测试-结果",
-                items: [
-                    { value: "测试无异常", fullName: "测试无异常", isExclusive: true },
-                    { value: "轻度褪色", fullName: "轻度褪色", isExclusive: true },
-                    { value: "重度褪色", fullName: "重度褪色", isExclusive: true },
-                    { value: "变色", fullName: "变色", isExclusive: true },
-                    { value: "溶解", fullName: "溶解", isExclusive: true },
-                ]
-            },
-            {
-                category: "洗前保护",
-                items: [
-                    { value: "翻面", fullName: "翻面" },
-                    { value: "网袋", fullName: "装网袋" },
-                    { value: "细网袋", fullName: "装细网袋" },
-                    { value: "防粘毛网袋", fullName: "装防粘毛网袋" },
-                    { value: "打结", fullName: "打结抽绳" },
-                    { value: "包裹", fullName: "包裹【纽扣/拉片/抽绳头/**】" },
-                    { value: "拆卸", fullName: "拆卸【纽扣/贝壳/皮饰/**】" },
-                    { value: "闭合", fullName: "闭合拉链" },
-                    { value: "魔术贴", fullName: "贴好魔术贴" },
-                    { value: "加固", fullName: "加固珠钻亮片" },
-                    { value: "单独装袋", fullName: "单独装袋" },
-                    { value: "褪色单独洗", fullName: "褪色需单独洗" },
-                ]
-            },
-            {
-                category: "预去渍-水洗",
-                items: [
-                    { value: "神器涂", fullName: "神器涂【】,静置【】min" },
-                    { value: "至尊稀释液浸泡", fullName: "至尊稀释液浸泡【】，放置【】h" },
-                    { value: "除菌去味至尊稀释液浸泡", fullName: "4g/L的除菌去味至尊稀释液整体浸泡（40℃温水），放置【30】min" },
-                    { value: "1号预涂液涂", fullName: "1号预涂液涂【】，放置【】h", tag: "tag-1hao" },
-                    { value: "1号预涂液涂+喷涂剂局部喷", fullName: "1号预涂液涂+喷涂剂局部喷【】，放置1h，至尊稀释液刷【】", tag: "tag-1hao" },
-                    { value: "1号去渍剂涂+神器涂", fullName: "1号去渍剂涂【】，静置【】min,叠加神器涂，静置【】min，用手指揉搓或使用牛骨刮刀轻轻刮拭污渍处", tag: "tag-1hao" },
-                    { value: "1号预涂液涂+喷涂剂整体喷", fullName: "1号预涂液涂+喷涂剂整体喷，放置1h，至尊稀释液刷【】", tag: "tag-1hao" },
-                    { value: "喷涂剂局部喷", fullName: "喷涂剂局部喷【】，放置【】h", tag: "tag-pentu" },
-                    { value: "喷涂剂整体喷", fullName: "喷涂剂整体喷，放置【】h", tag: "tag-pentu" },
-                    { value: "彩漂粉+喷涂剂常温", fullName: "彩漂粉+喷涂剂叠涂于【】处，放置【】h", tag: "tag-pentu" },
-                    { value: "喷涂剂整体湿喷", fullName: "喷涂剂整体湿喷，放置h", tag: "tag-pentu" },
-                    { value: "喷涂剂浸脱", fullName: "喷涂剂浸脱，放置【】h", tag: "tag-pentu" },
-                    { value: "彩漂粉+喷涂剂高温", fullName: "彩漂粉+喷涂剂叠涂于【】处，高温不超过【3】min", tag: "tag-pentu" },
-                    { value: "彩+衣整体喷", fullName: "彩+衣整体喷，放置【】h", tag: "tag-pentu" },
-                    { value: "彩+衣整体湿喷", fullName: "彩+衣整体湿喷，放置【】h", tag: "tag-pentu" },
-                    { value: "彩+衣稀释液浸泡", fullName: "彩+衣稀释液浸泡，放置【】h", tag: "tag-pentu" },
-                    { value: "皂液喷", fullName: "皂液喷【】，放置【】min，再搓洗/刷洗/刮洗污渍处", tag: "tag-zaoxuan" },
-                    { value: "T1+神器+去笔渍剂", fullName: "滴加T1于笔墨渍处，使污渍润湿，接着涂抹神器，再叠加去笔渍剂，用双手捏住污渍处揉搓，重复3次", tag: "tag-zaoxuan" },
-                    { value: "除锈剂涂较浅锈渍", fullName: "除锈剂涂锈渍处，放置【】min", tag: "tag-zaoxuan" },
-                    { value: "除锈剂涂较深锈渍", fullName: "除锈剂稀释液涂锈渍处，放置【】min", tag: "tag-zaoxuan" },
-                    { value: "氯漂点涂", fullName: "氯漂点涂【】，放置【】min", tag: "tag-chlori" },
-                    { value: "氯漂稀释液浸泡", fullName: "氯漂稀释液浸泡【】,放置【】h", tag: "tag-chlori" },
-                    { value: "Y1涂", fullName: "Y1涂【】处，放置20s，60℃热水冲洗干净，污渍处局部喷喷涂剂，放置【30】min", tag: "tag-chlori" },
-                    { value: "Y1稀释液浸泡", fullName: "Y1稀释液浸泡，放置【30】min（如未去除，可重复浸泡步骤）,清水漂洗后整体喷喷涂剂，放置【30】min", tag: "tag-chlori" },
-                    { value: "去染色剂1号+2号", fullName: "去染色剂1号+2号稀释液浸泡，放置【】h", tag: "tag-chlori" },
-                    { value: "局部刷", fullName: "至尊稀释液刷洗【】" },
-                    { value: "整体刷", fullName: "至尊稀释液整体刷洗" },
-                    { value: "避涂层", fullName: "避开涂层图案" },
-                    { value: "避深色", fullName: "避开深色部位" },
-                ]
-            },
-            {
-                category: "预去渍-干洗",
-                items: [
-                    { value: "蒸汽喷吹", fullName: "蒸汽喷吹【】" },
-                    { value: "干洗预涂液预涂", fullName: "干洗预涂液涂【】，放置【】min" },
-                    { value: "干洗预涂液预涂+揉搓/敲打", fullName: "干洗预涂液预涂黑渍，放置【】min,揉搓/敲打污渍直至无黑渍渗出，再涂干洗预涂液" },
-                    { value: "神器喷吹+干洗预涂液涂", fullName: "神器预涂【】，轻刷污渍处，蒸汽喷吹5-10s，再涂干洗预涂液，放置【】min" },
-                    { value: "神器喷吹", fullName: "神器预涂【】，放置【】min,蒸汽喷吹5-10s，未去除使用彩漂液点涂污渍处，放置【】min,蒸汽高温2次（每次不超过30s），蒸汽吹喷5-10s" },
-                    { value: "彩漂喷吹", fullName: "神器预涂【】，放置【】min,蒸汽喷吹5-10s" },
-                    { value: "T1喷吹", fullName: "T1预涂【】，牛骨刀轻点污渍2-3s，蒸汽喷吹5-10s" },
-                    { value: "除锈剂喷吹", fullName: "除锈剂预涂锈渍，放置【】min，蒸汽喷吹5-10s" },
-                    { value: "四氯乙烯+干洗去油渍剂", fullName: "四氯乙烯预涂【】，喷干洗去渍剂覆盖，压缩空气喷吹" },
-                    { value: "T1+神器搓", fullName: "T1预涂【】，神器覆盖，牛骨刀刮洗" },
-                ]
-            },
-            {
-                category: "洗涤",
-                items: [
-                    { value: "家用机", fullName: "家用机" },
-                    { value: "凑机", fullName: "凑机" },
-                    { value: "加急", fullName: "加急" },
-                    { value: "60℃氧漂-加强P-3", fullName: "[60氧漂-加强]家用机大物P-3", isExclusive: true, tag: "tag-pentu" },
-                    { value: "60℃氧漂-加强P-5", fullName: "[60氧漂-加强]家用机大物P-5", isExclusive: true, tag: "tag-pentu" },
-                    { value: "60℃氧漂", fullName: "[60氧漂]工业机4号", isExclusive: true, tag: "tag-pentu" },
-                    { value: "40℃氧漂", fullName: "[40氧漂]工业机14号", isExclusive: true, tag: "tag-pentu" },
-                    { value: "40℃至尊", fullName: "[40至尊]工业机13号", isExclusive: true, tag: "tag-zaoxuan" },
-                    { value: "40℃至尊-柔和", fullName: "[40至尊-柔和]工业机1号", isExclusive: true, tag: "tag-zaoxuan" },
-                    { value: "30℃至尊", fullName: "[30至尊]工业机10号", isExclusive: true, tag: "tag-zaoxuan" },
-                    { value: "羽绒服40℃浸泡", fullName: "[40浸泡]工业机2号", isExclusive: true, tag: "tag-1hao" },
-                    { value: "羽绒服30℃浸泡", fullName: "[30浸泡]工业机8号", isExclusive: true, tag: "tag-1hao" },
-                    { value: "羽绒服40℃", fullName: "[40至尊]工业机3号", isExclusive: true, tag: "tag-1hao" },
-                    { value: "羽绒服30℃", fullName: "[30至尊]工业机15号", isExclusive: true, tag: "tag-1hao" },
-                    { value: "羽绒服柔和", fullName: "[常温至尊-柔和]工业机7号", isExclusive: true, tag: "tag-1hao" },
-                    { value: "布草常规", fullName: "[常温至尊-布草]工业机18号", isExclusive: true },
-                    { value: "冲锋衣30℃至尊", fullName: "[30至尊]工业机9号", isExclusive: true },
-                    { value: "50浸泡", fullName: "[50浸泡]工业机12号", isExclusive: true },
-                    { value: "湿洗5号", fullName: "湿洗5号", isExclusive: true },
-                    { value: "家用机快洗P-2", fullName: "家用机速洗P-2", isExclusive: true, tag: "tag-zaoxuan" },
-                    { value: "家用机快洗P-3", fullName: "家用机速洗P-3", isExclusive: true, tag: "tag-zaoxuan" },
-                    { value: "家用机快洗P-5", fullName: "家用机速洗P-3+家用机漂+脱P-2", isExclusive: true, tag: "tag-zaoxuan" },
-                ]
-            },
-            {
-                category: "洗涤-干洗",
-                items: [
-                    { value: "凑机", fullName: "凑机" },
-                    { value: "加急", fullName: "加急" },
-                    { value: "四氯乙烯1号", fullName: "四氯乙烯1号", isExclusive: true },
-                    { value: "四氯乙烯快洗", fullName: "四氯乙烯快洗", isExclusive: true },
-                    { value: "碳氢1号", fullName: "碳氢1号", isExclusive: true },
-                    { value: "碳氢快洗", fullName: "碳氢快洗", isExclusive: true },
-                ]
-            },
-            {
-                category: "手洗",
-                items: [
-                    { value: "擦洗", fullName: "擦洗" },
-                    { value: "揉洗", fullName: "揉洗" },
-                    { value: "拎洗", fullName: "拎洗" },
-                    { value: "皮革避免沾水", fullName: "皮革避免沾水" },
-                    { value: "毛巾包裹脱水", fullName: "毛巾包裹脱水" },
-                    { value: "毛巾包裹纽扣脱水", fullName: "毛巾包裹纽扣脱水" },
-                    { value: "毛巾包裹金属配件脱水", fullName: "毛巾包裹金属配件脱水" },
-                    { value: "毛巾吸干", fullName: "毛巾吸干" },
-                    { value: "不脱水", fullName: "不脱水" },
-                ]
-            },
-            {
-                category: "柔顺",
-                items: [
-                    { value: "薰衣草", fullName: "薰衣草香柔顺剂", isExclusive: true },
-                    { value: "白茶香", fullName: "白茶香柔顺剂", isExclusive: true },
-                    { value: "橙花香", fullName: "橙花香柔顺剂", isExclusive: true },
-                    { value: "除菌液+柔顺剂", fullName: "最后一次漂洗时，同时加入多用途除菌液0.5盖和15g薰衣草柔顺剂，浸泡5min", isExclusive: true },
-                ]
-            },
-            {
-                category: "干燥",
-                items: [
-                    { value: "凑机", fullName: "凑机" },
-                    { value: "加急", fullName: "加急" },
-                    { value: "静态悬挂", fullName: "烘房悬挂/立式干衣机悬挂/自然晾干" },
-                    { value: "静态平铺", fullName: "烘房平铺" },
-                    { value: "非填充服人像机鼓风", fullName: "人像机鼓风" },
-                    { value: "50℃翻转", fullName: "烘干机1号" },
-                    { value: "填充服人像机鼓风", fullName: "人像机鼓风0.5h→手工均绒", tag: "tag-1hao" },
-                    { value: "填充服静态悬挂", fullName: "大烘房悬挂2h→手工均绒/小烘房悬挂3h→手工均绒/立式干衣机悬挂5h→手工均绒", tag: "tag-1hao" },
-                    { value: "填充服烘房平铺", fullName: "填充服烘房平铺→手工均绒", tag: "tag-1hao" },
-                    { value: "填充服55℃翻转", fullName: "烘干机3号，如未干使用烘干机10号返烘", tag: "tag-1hao" },
-                    { value: "填充服45℃翻转", fullName: "大烘房悬挂2h→烘干机2号/小烘房悬挂3h→烘干机2号/立式干衣机悬挂5h→烘干机2号", tag: "tag-1hao" },
-                    { value: "布草-被套翻转", fullName: "烘干机7号" },
-                    { value: "布草-床单翻转", fullName: "烘干机8号" },
-                    { value: "布草-枕套翻转", fullName: "烘干机9号" },
-                ]
-            },
-            {
-                category: "熨烫",
-                items: [
-                    { value: "烫袖线", fullName: "烫袖线" },
-                    { value: "烫裤中线", fullName: "烫裤中线" },
-                    { value: "不烫袖线", fullName: "不烫袖线" },
-                    { value: "不烫裤中线", fullName: "不烫裤中线" },
-                    { value: "消除袖线", fullName: "已有袖线需消除" },
-                    { value: "消除裤中线", fullName: "已有裤中线需消除" },
-                    { value: "禁止压烫", fullName: "禁止压烫" },
-                    { value: "近距离喷蒸汽", fullName: "近距离（≤10cm）喷蒸汽" },
-                    { value: "含皮", fullName: "皮革禁止蒸汽熨烫" },
-                    { value: "含PU", fullName: "PU禁止光面夹机、熨斗直接接触" },
-                    { value: "含皮毛", fullName: "皮毛禁止蒸汽熨烫" },
-                    { value: "深色高光泽真丝/荧光色", fullName: "需试烫" },
-                ]
+      </div>
+    </main>
+  </div>
+  <script>
+    const extraWashOptions = ["凑机", "加急"];
+
+    const testCategories = ["洗前测试-试剂", "洗前测试-方法", "洗前测试-结果"];
+
+    const industrialToHomeMap = {
+      "60℃氧漂": "[60氧漂]家用机日常P-3/[60氧漂]家用机日常P-5",
+      "40℃氧漂": "[40氧漂]家用机羽绒（加时）P-3/[40氧漂]家用机羽绒（加时）P-5",
+      "40℃至尊": "[40至尊]家用机日常洗（加时）",
+      "30℃至尊": "[30至尊]家用机羽绒",
+      "40℃至尊-柔和": "[40至尊-柔和]家用机羊毛（加时）",
+      "羽绒服30℃": "[30至尊]家用机速洗（加时）",
+      "羽绒服40℃": "[40羽绒]家用机羽绒P-3/[40羽绒]家用机羽绒P-5"
+    };
+
+    const processes = [
+      {
+        category: "洗前测试-试剂",
+        items: [
+          { value: "清水", fullName: "清水", isExclusive: true },
+          { value: "神器", fullName: "神器", isExclusive: true },
+          { value: "至尊原液", fullName: "至尊原液", isExclusive: true },
+          { value: "至尊稀释液", fullName: "至尊稀释液", isExclusive: true },
+          { value: "喷涂剂", fullName: "喷涂剂", isExclusive: true },
+          { value: "彩+衣", fullName: "彩+衣", isExclusive: true },
+          { value: "喷涂剂+彩漂粉", fullName: "喷涂剂+彩漂粉", isExclusive: true },
+          { value: "四氯乙烯", fullName: "四氯乙烯", isExclusive: true },
+          { value: "碳氢", fullName: "碳氢", isExclusive: true },
+        ]
+      },
+      {
+        category: "洗前测试-方法",
+        items: [
+          { value: "常温", fullName: "常温", isExclusive: true },
+          { value: "高温", fullName: "高温", isExclusive: true },
+        ]
+      },
+      {
+        category: "洗前测试-结果",
+        items: [
+          { value: "测试无异常", fullName: "测试无异常", isExclusive: true },
+          { value: "轻度褪色", fullName: "轻度褪色", isExclusive: true },
+          { value: "重度褪色", fullName: "重度褪色", isExclusive: true },
+          { value: "变色", fullName: "变色", isExclusive: true },
+          { value: "溶解", fullName: "溶解", isExclusive: true },
+        ]
+      },
+      {
+        category: "洗前保护",
+        items: [
+          { value: "翻面", fullName: "翻面" },
+          { value: "网袋", fullName: "装网袋" },
+          { value: "细网袋", fullName: "装细网袋" },
+          { value: "防粘毛网袋", fullName: "装防粘毛网袋" },
+          { value: "打结", fullName: "打结抽绳" },
+          { value: "包裹", fullName: "包裹【纽扣/拉片/抽绳头/**】" },
+          { value: "拆卸", fullName: "拆卸【纽扣/贝壳/皮饰/**】" },
+          { value: "闭合", fullName: "闭合拉链" },
+          { value: "魔术贴", fullName: "贴好魔术贴" },
+          { value: "加固", fullName: "加固珠钻亮片" },
+          { value: "单独装袋", fullName: "单独装袋" },
+          { value: "褪色单独洗", fullName: "褪色需单独洗" },
+        ]
+      },
+      {
+        category: "预去渍-水洗",
+        items: [
+          { value: "神器涂", fullName: "神器涂【】,静置【】min" },
+          { value: "至尊稀释液浸泡", fullName: "至尊稀释液浸泡【】，放置【】h" },
+          { value: "除菌去味至尊稀释液浸泡", fullName: "4g/L的除菌去味至尊稀释液整体浸泡（40℃温水），放置【30】min" },
+          { value: "1号预涂液涂", fullName: "1号预涂液涂【】，放置【】h", tag: "tag-1hao" },
+          { value: "1号预涂液涂+喷涂剂局部喷", fullName: "1号预涂液涂+喷涂剂局部喷【】，放置1h，至尊稀释液刷【】", tag: "tag-1hao" },
+          { value: "1号去渍剂涂+神器涂", fullName: "1号去渍剂涂【】，静置【】min,叠加神器涂，静置【】min，用手指揉搓或使用牛骨刮刀轻轻刮拭污渍处", tag: "tag-1hao" },
+          { value: "1号预涂液涂+喷涂剂整体喷", fullName: "1号预涂液涂+喷涂剂整体喷，放置1h，至尊稀释液刷【】", tag: "tag-1hao" },
+          { value: "喷涂剂局部喷", fullName: "喷涂剂局部喷【】，放置【】h", tag: "tag-pentu" },
+          { value: "喷涂剂整体喷", fullName: "喷涂剂整体喷，放置【】h", tag: "tag-pentu" },
+          { value: "彩漂粉+喷涂剂常温", fullName: "彩漂粉+喷涂剂叠涂于【】处，放置【】h", tag: "tag-pentu" },
+          { value: "喷涂剂整体湿喷", fullName: "喷涂剂整体湿喷，放置h", tag: "tag-pentu" },
+          { value: "喷涂剂浸脱", fullName: "喷涂剂浸脱，放置【】h", tag: "tag-pentu" },
+          { value: "彩漂粉+喷涂剂高温", fullName: "彩漂粉+喷涂剂叠涂于【】处，高温不超过【3】min", tag: "tag-pentu" },
+          { value: "彩+衣整体喷", fullName: "彩+衣整体喷，放置【】h", tag: "tag-pentu" },
+          { value: "彩+衣整体湿喷", fullName: "彩+衣整体湿喷，放置【】h", tag: "tag-pentu" },
+          { value: "彩+衣稀释液浸泡", fullName: "彩+衣稀释液浸泡，放置【】h", tag: "tag-pentu" },
+          { value: "皂液喷", fullName: "皂液喷【】，放置【】min，再搓洗/刷洗/刮洗污渍处", tag: "tag-zaoxuan" },
+          { value: "T1+神器+去笔渍剂", fullName: "滴加T1于笔墨渍处，使污渍润湿，接着涂抹神器，再叠加去笔渍剂，用双手捏住污渍处揉搓，重复3次", tag: "tag-zaoxuan" },
+          { value: "除锈剂涂较浅锈渍", fullName: "除锈剂涂锈渍处，放置【】min", tag: "tag-zaoxuan" },
+          { value: "除锈剂涂较深锈渍", fullName: "除锈剂稀释液涂锈渍处，放置【】min", tag: "tag-zaoxuan" },
+          { value: "氯漂点涂", fullName: "氯漂点涂【】，放置【】min", tag: "tag-chlori" },
+          { value: "氯漂稀释液浸泡", fullName: "氯漂稀释液浸泡【】,放置【】h", tag: "tag-chlori" },
+          { value: "Y1涂", fullName: "Y1涂【】处，放置20s，60℃热水冲洗干净，污渍处局部喷喷涂剂，放置【30】min", tag: "tag-chlori" },
+          { value: "Y1稀释液浸泡", fullName: "Y1稀释液浸泡，放置【30】min（如未去除，可重复浸泡步骤）,清水漂洗后整体喷喷涂剂，放置【30】min", tag: "tag-chlori" },
+          { value: "去染色剂1号+2号", fullName: "去染色剂1号+2号稀释液浸泡，放置【】h", tag: "tag-chlori" },
+          { value: "局部刷", fullName: "至尊稀释液刷洗【】" },
+          { value: "整体刷", fullName: "至尊稀释液整体刷洗" },
+          { value: "避涂层", fullName: "避开涂层图案" },
+          { value: "避深色", fullName: "避开深色部位" },
+        ]
+      },
+      {
+        category: "预去渍-干洗",
+        items: [
+          { value: "蒸汽喷吹", fullName: "蒸汽喷吹【】" },
+          { value: "干洗预涂液预涂", fullName: "干洗预涂液涂【】，放置【】min" },
+          { value: "干洗预涂液预涂+揉搓/敲打", fullName: "干洗预涂液预涂黑渍，放置【】min,揉搓/敲打污渍直至无黑渍渗出，再涂干洗预涂液" },
+          { value: "神器喷吹+干洗预涂液涂", fullName: "神器预涂【】，轻刷污渍处，蒸汽喷吹5-10s，再涂干洗预涂液，放置【】min" },
+          { value: "神器喷吹", fullName: "神器预涂【】，放置【】min,蒸汽喷吹5-10s，未去除使用彩漂液点涂污渍处，放置【】min,蒸汽高温2次（每次不超过30s），蒸汽吹喷5-10s" },
+          { value: "彩漂喷吹", fullName: "神器预涂【】，放置【】min,蒸汽喷吹5-10s" },
+          { value: "T1喷吹", fullName: "T1预涂【】，牛骨刀轻点污渍2-3s，蒸汽喷吹5-10s" },
+          { value: "除锈剂喷吹", fullName: "除锈剂预涂锈渍，放置【】min，蒸汽喷吹5-10s" },
+          { value: "四氯乙烯+干洗去油渍剂", fullName: "四氯乙烯预涂【】，喷干洗去渍剂覆盖，压缩空气喷吹" },
+          { value: "T1+神器搓", fullName: "T1预涂【】，神器覆盖，牛骨刀刮洗" },
+        ]
+      },
+      {
+        category: "洗涤",
+        items: [
+          { value: "家用机", fullName: "家用机" },
+          { value: "凑机", fullName: "凑机" },
+          { value: "加急", fullName: "加急" },
+          { value: "60℃氧漂-加强P-3", fullName: "[60氧漂-加强]家用机大物P-3", isExclusive: true, tag: "tag-pentu" },
+          { value: "60℃氧漂-加强P-5", fullName: "[60氧漂-加强]家用机大物P-5", isExclusive: true, tag: "tag-pentu" },
+          { value: "60℃氧漂", fullName: "[60氧漂]工业机4号", isExclusive: true, tag: "tag-pentu" },
+          { value: "40℃氧漂", fullName: "[40氧漂]工业机14号", isExclusive: true, tag: "tag-pentu" },
+          { value: "40℃至尊", fullName: "[40至尊]工业机13号", isExclusive: true, tag: "tag-zaoxuan" },
+          { value: "40℃至尊-柔和", fullName: "[40至尊-柔和]工业机1号", isExclusive: true, tag: "tag-zaoxuan" },
+          { value: "30℃至尊", fullName: "[30至尊]工业机10号", isExclusive: true, tag: "tag-zaoxuan" },
+          { value: "羽绒服40℃浸泡", fullName: "[40浸泡]工业机2号", isExclusive: true, tag: "tag-1hao" },
+          { value: "羽绒服30℃浸泡", fullName: "[30浸泡]工业机8号", isExclusive: true, tag: "tag-1hao" },
+          { value: "羽绒服40℃", fullName: "[40至尊]工业机3号", isExclusive: true, tag: "tag-1hao" },
+          { value: "羽绒服30℃", fullName: "[30至尊]工业机15号", isExclusive: true, tag: "tag-1hao" },
+          { value: "羽绒服柔和", fullName: "[常温至尊-柔和]工业机7号", isExclusive: true, tag: "tag-1hao" },
+          { value: "布草常规", fullName: "[常温至尊-布草]工业机18号", isExclusive: true },
+          { value: "冲锋衣30℃至尊", fullName: "[30至尊]工业机9号", isExclusive: true },
+          { value: "50浸泡", fullName: "[50浸泡]工业机12号", isExclusive: true },
+          { value: "湿洗5号", fullName: "湿洗5号", isExclusive: true },
+          { value: "家用机快洗P-2", fullName: "家用机速洗P-2", isExclusive: true, tag: "tag-zaoxuan" },
+          { value: "家用机快洗P-3", fullName: "家用机速洗P-3", isExclusive: true, tag: "tag-zaoxuan" },
+          { value: "家用机快洗P-5", fullName: "家用机速洗P-3+家用机漂+脱P-2", isExclusive: true, tag: "tag-zaoxuan" },
+          { value: "30化纤芯", fullName: "[30至尊化纤芯]工业机19号", isExclusive: true, tag: "tag-xinlan" },
+          { value: "漂洗窗帘", fullName: "[漂洗窗帘]工业机20号", isExclusive: true, tag: "tag-xinlan" },
+          { value: "常温窗帘", fullName: "[常温至尊窗帘]工业机21号", isExclusive: true, tag: "tag-xinlan" },
+          { value: "常温窗纱", fullName: "[常温至尊窗纱]工业机22号", isExclusive: true, tag: "tag-xinlan" },
+          { value: "40窗帘", fullName: "[40氧漂窗帘]工业机23号", isExclusive: true, tag: "tag-xinlan" },
+          { value: "40窗纱", fullName: "[40氧漂窗纱]工业机24号", isExclusive: true, tag: "tag-xinlan" },
+          { value: "莱赛尔套件*", fullName: "湿洗2号", isExclusive: true },
+          { value: "莱赛尔套件***", fullName: "湿洗3号", isExclusive: true },
+          { value: "真丝套件*", fullName: "湿洗4号", isExclusive: true },
+          { value: "真丝套件***", fullName: "湿洗5号", isExclusive: true },
+          { value: "套件重油", fullName: "湿洗6号", isExclusive: true },
+          { value: "蚕丝芯*", fullName: "湿洗7号", isExclusive: true },
+          { value: "羽绒服柔和*", fullName: "湿洗8号", isExclusive: true },
+          { value: "脆弱窗帘", fullName: "湿洗9号", isExclusive: true },
+        ]
+      },
+      {
+        category: "洗涤-干洗",
+        items: [
+          { value: "凑机", fullName: "凑机" },
+          { value: "加急", fullName: "加急" },
+          { value: "四氯乙烯1号", fullName: "四氯乙烯1号", isExclusive: true },
+          { value: "四氯乙烯快洗", fullName: "四氯乙烯快洗", isExclusive: true },
+          { value: "碳氢1号", fullName: "碳氢1号", isExclusive: true },
+          { value: "碳氢快洗", fullName: "碳氢快洗", isExclusive: true },
+        ]
+      },
+      {
+        category: "手洗",
+        items: [
+          { value: "擦洗", fullName: "擦洗" },
+          { value: "揉洗", fullName: "揉洗" },
+          { value: "拎洗", fullName: "拎洗" },
+          { value: "皮革避免沾水", fullName: "皮革避免沾水" },
+          { value: "毛巾包裹脱水", fullName: "毛巾包裹脱水" },
+          { value: "毛巾包裹纽扣脱水", fullName: "毛巾包裹纽扣脱水" },
+          { value: "毛巾包裹金属配件脱水", fullName: "毛巾包裹金属配件脱水" },
+          { value: "毛巾吸干", fullName: "毛巾吸干" },
+          { value: "不脱水", fullName: "不脱水" },
+        ]
+      },
+      {
+        category: "柔顺",
+        items: [
+          { value: "薰衣草", fullName: "薰衣草香柔顺剂", isExclusive: true },
+          { value: "白茶香", fullName: "白茶香柔顺剂", isExclusive: true },
+          { value: "橙花香", fullName: "橙花香柔顺剂", isExclusive: true },
+          { value: "除菌液+柔顺剂", fullName: "最后一次漂洗时，同时加入多用途除菌液0.5盖和15g薰衣草柔顺剂，浸泡5min", isExclusive: true },
+        ]
+      },
+      {
+        category: "干燥",
+        items: [
+          { value: "凑机", fullName: "凑机" },
+          { value: "加急", fullName: "加急" },
+          { value: "静态悬挂", fullName: "烘房悬挂/立式干衣机悬挂/自然晾干" },
+          { value: "静态平铺", fullName: "烘房平铺" },
+          { value: "非填充服人像机鼓风", fullName: "人像机鼓风" },
+          { value: "50℃翻转", fullName: "烘干机1号" },
+          { value: "填充服人像机鼓风", fullName: "人像机鼓风0.5h→手工均绒", tag: "tag-1hao" },
+          { value: "填充服静态悬挂", fullName: "大烘房悬挂2h→手工均绒/小烘房悬挂3h→手工均绒/立式干衣机悬挂5h→手工均绒", tag: "tag-1hao" },
+          { value: "填充服烘房平铺", fullName: "填充服烘房平铺→手工均绒", tag: "tag-1hao" },
+          { value: "填充服55℃翻转", fullName: "烘干机3号，如未干使用烘干机10号返烘", tag: "tag-1hao" },
+          { value: "填充服45℃翻转", fullName: "大烘房悬挂2h→烘干机2号/小烘房悬挂3h→烘干机2号/立式干衣机悬挂5h→烘干机2号", tag: "tag-1hao" },
+          { value: "布草-被套翻转", fullName: "烘干机7号" },
+          { value: "布草-床单翻转", fullName: "烘干机8号" },
+          { value: "布草-枕套翻转", fullName: "烘干机9号" },
+        ]
+      },
+      {
+        category: "熨烫",
+        items: [
+          { value: "烫袖线", fullName: "烫袖线" },
+          { value: "烫裤中线", fullName: "烫裤中线" },
+          { value: "不烫袖线", fullName: "不烫袖线" },
+          { value: "不烫裤中线", fullName: "不烫裤中线" },
+          { value: "消除袖线", fullName: "已有袖线需消除" },
+          { value: "消除裤中线", fullName: "已有裤中线需消除" },
+          { value: "禁止压烫", fullName: "禁止压烫" },
+          { value: "近距离喷蒸汽", fullName: "近距离（≤10cm）喷蒸汽" },
+          { value: "含皮", fullName: "皮革禁止蒸汽熨烫" },
+          { value: "含PU", fullName: "PU禁止光面夹机、熨斗直接接触" },
+          { value: "含皮毛", fullName: "皮毛禁止蒸汽熨烫" },
+          { value: "深色高光泽真丝/荧光色", fullName: "需试烫" },
+        ]
+      }
+    ];
+
+    const presets = {
+      "dabo60": ["60℃氧漂"],
+      "bucaoB": ["布草常规", "布草-被套翻转"],
+      "bucaoC": ["布草常规", "布草-床单翻转"],
+      "bucaoZ": ["布草常规", "布草-枕套翻转"],
+      "bucaoyangB": ["60℃氧漂", "布草-被套翻转"],
+      "bucaoyangC": ["60℃氧漂", "布草-床单翻转"],
+      "bucaoyangZ": ["60℃氧漂", "布草-枕套翻转"],
+      "kuaixi": ["家用机快洗P-2", "薰衣草"]
+    };
+
+    const quickTexts = {
+      "yujin": "预去渍：2L 60℃的热水+1勺蓝色月光色渍净+1泵除菌去味至尊整体浸泡1h；洗涤：家用机日常洗程序设定40℃，漂洗4次，1泵除菌去味至尊、1/4瓶盖薰衣草柔顺剂；干燥：烘干机5号；熨烫：蒸烫后置于终检区、修饰区、包装区散潮，环境温度在24℃～26℃、湿度在36%～65%，散潮时间不低于30min"
+    };
+
+    const selectedItems = {};
+    processes.forEach(process => selectedItems[process.category] = []);
+
+    const categoryContents = {};
+    processes.forEach(process => categoryContents[process.category] = "");
+
+    let selectedDryWetItems = [];
+    let selectedWetDryItems = [];
+
+    const column1 = document.querySelector('.lg\\:col-span-4:first-of-type');
+    const column2 = document.querySelector('.lg\\:col-span-4:nth-of-type(2)');
+    const resultText = document.getElementById('resultText');
+    const copyBtn = document.getElementById('copyBtn');
+    const clearBtn = document.getElementById('clearBtn');
+    const copyMessage = document.getElementById('copyMessage');
+    const charCount = document.getElementById('charCount');
+    const editTip = document.getElementById('editTip');
+    const mainBodyBtn = document.getElementById('mainBodyBtn');
+    const innerLiningBtn = document.getElementById('innerLiningBtn');
+    const testWarning = document.getElementById('testWarning');
+    let currentPrefix = '';
+
+    init();
+
+    function init() {
+      renderProcessButtons();
+      updateResult();
+      bindEvents();
+      adjustTextareaHeight();
+    }
+
+    function renderProcessButtons() {
+      const column1Categories = ["洗前测试-试剂", "洗前测试-方法", "洗前测试-结果", "洗前保护", "预去渍-水洗", "预去渍-干洗"];
+      const column2Categories = ["洗涤", "洗涤-干洗", "手洗", "柔顺", "干燥", "熨烫"];
+
+      processes.forEach((process) => {
+        const card = document.createElement('div');
+        if (column1Categories.includes(process.category)) {
+          card.className = 'column1-card';
+        } else {
+          card.className = 'category-card';
+        }
+        card.dataset.category = process.category;
+
+        const title = document.createElement('h3');
+        if (column1Categories.includes(process.category)) {
+          title.className = 'text-sm font-semibold mb-2 text-gray-800 flex items-center';
+        } else {
+          title.className = 'text-base font-semibold mb-2.5 text-gray-800 flex items-center';
+        }
+        title.textContent = process.category;
+        card.appendChild(title);
+
+        const btnContainer = document.createElement('div');
+        btnContainer.className = 'flex flex-wrap gap-2';
+
+        process.items.forEach(item => {
+          const btn = document.createElement('button');
+          if (item.value === "家用机" && process.category === "洗涤") {
+            btn.className = 'home-switch-btn';
+          } else if (item.tag) {
+            btn.className = item.tag;
+          } else if (item.specialStyle === "dark-yellow-border") {
+            btn.className = 'dark-yellow-border-btn';
+          } else if (item.specialStyle === "teal-border") {
+            btn.className = 'teal-border-btn';
+          } else if (item.isStain) {
+            btn.className = 'stain-btn';
+          } else {
+            btn.className = 'process-btn';
+          }
+          btn.textContent = item.value;
+          btn.dataset.value = item.value;
+          btn.dataset.category = process.category;
+          btn.dataset.isStain = item.isStain ? 'true' : 'false';
+          btn.dataset.specialStyle = item.specialStyle || '';
+          btn.dataset.isExclusive = item.isExclusive ? 'true' : 'false';
+          btn.addEventListener('click', () => toggleSelect(process.category, item.value, btn));
+          btnContainer.appendChild(btn);
+        });
+
+        card.appendChild(btnContainer);
+
+        if (column1Categories.includes(process.category)) {
+          column1.appendChild(card);
+        } else if (column2Categories.includes(process.category)) {
+          column2.appendChild(card);
+        }
+      });
+    }
+
+    function toggleSelect(category, value, btn) {
+      const hasEditedContent = resultText.dataset.userEdited === 'true' && resultText.value.trim() !== '';
+      const washCategories = ["洗涤", "洗涤-干洗"];
+      const isWashCategory = washCategories.includes(category);
+      const isExtraOption = extraWashOptions.includes(value);
+      const isDryCategory = category === "干燥";
+      const isTestCategory = testCategories.includes(category);
+
+      if (isWashCategory && !isExtraOption && value !== "家用机" && btn.dataset.isExclusive === "true") {
+        washCategories.forEach(cat => {
+          const allButtons = document.querySelectorAll(`button[data-category="${cat}"][data-is-exclusive="true"]`);
+          allButtons.forEach(button => {
+            if (!(cat === category && button.dataset.value === value)) {
+              const idx = selectedItems[cat].indexOf(button.dataset.value);
+              if (idx !== -1) {
+                selectedItems[cat].splice(idx, 1);
+              }
+              button.classList.remove('selected-btn');
             }
-        ];
-        
-        const presets = {
-            "dabo60": ["60℃氧漂"],            
-            "bucaoB": ["布草常规","布草-被套翻转"],
-            "bucaoC": ["布草常规","布草-床单翻转"],
-            "bucaoZ": ["布草常规","布草-枕套翻转"],
-            "bucaoyangB": ["60℃氧漂", "布草-被套翻转"],
-            "bucaoyangC": ["60℃氧漂", "布草-床单翻转"],
-            "bucaoyangZ": ["60℃氧漂", "布草-枕套翻转"]
-        };
-        
-        const quickTexts = {
-            "yujin": "预去渍：2L 60℃的热水+1勺蓝色月光色渍净+1泵除菌去味至尊整体浸泡1h；洗涤：家用机日常洗程序设定40℃，漂洗4次，1泵除菌去味至尊、1/4瓶盖薰衣草柔顺剂；干燥：烘干机5号；熨烫：蒸烫后置于终检区、修饰区、包装区散潮，环境温度在24℃～26℃、湿度在36%～65%，散潮时间不低于30min"
-        };
-        
-        const selectedItems = {};
-        processes.forEach(process => selectedItems[process.category] = []);
-        const categoryContents = {};
-        processes.forEach(process => categoryContents[process.category] = "");
-        let selectedDryWetItems = [];
-        let selectedWetDryItems = [];
-        
-        const column1 = document.querySelector('.lg\\:col-span-4:first-of-type');
-        const column2 = document.querySelector('.lg\\:col-span-4:nth-of-type(2)');
-        const resultText = document.getElementById('resultText');
-        const copyBtn = document.getElementById('copyBtn');
-        const clearBtn = document.getElementById('clearBtn');
-        const copyMessage = document.getElementById('copyMessage');
-        const charCount = document.getElementById('charCount');
-        const editTip = document.getElementById('editTip');
-        const mainBodyBtn = document.getElementById('mainBodyBtn');
-        const innerLiningBtn = document.getElementById('innerLiningBtn');
-        const testWarning = document.getElementById('testWarning');
-        
-        let currentPrefix = '';
-        
-        init();
-        function init() {
-            renderProcessButtons();
-            updateResult();
-            bindEvents();
-            adjustTextareaHeight();
+          });
+        });
+        const idx = selectedItems[category].indexOf(value);
+        if (idx === -1) {
+          selectedItems[category].push(value);
+          btn.classList.add('selected-btn');
+          btn.classList.add('scale-105');
+          setTimeout(() => btn.classList.remove('scale-105'), 300);
+        } else {
+          selectedItems[category].splice(idx, 1);
+          btn.classList.remove('selected-btn');
         }
-        
-        function renderProcessButtons() {
-            const column1Categories = ["洗前测试-试剂", "洗前测试-方法", "洗前测试-结果", "洗前保护", "预去渍-水洗", "预去渍-干洗"];
-            const column2Categories = ["洗涤", "洗涤-干洗", "手洗", "柔顺", "干燥", "熨烫"];
-            processes.forEach((process) => {
-                const card = document.createElement('div');
-                if (column1Categories.includes(process.category)) {
-                    card.className = 'column1-card';
-                } else {
-                    card.className = 'category-card';
-                }
-                card.dataset.category = process.category;
-                const title = document.createElement('h3');
-                if (column1Categories.includes(process.category)) {
-                    title.className = 'text-sm font-semibold mb-2 text-gray-800 flex items-center';
-                } else {
-                    title.className = 'text-base font-semibold mb-2.5 text-gray-800 flex items-center';
-                }
-                title.textContent = process.category;
-                card.appendChild(title);
-                const btnContainer = document.createElement('div');
-                btnContainer.className = 'flex flex-wrap gap-2';
-                process.items.forEach(item => {
-                    const btn = document.createElement('button');
-                    if (item.value === "家用机" && process.category === "洗涤") {
-                        btn.className = 'home-switch-btn';
-                    } else if (item.tag) {
-                        btn.className = item.tag;
-                    } else if (item.specialStyle === "dark-yellow-border") {
-                        btn.className = 'dark-yellow-border-btn';
-                    } else if (item.specialStyle === "teal-border") {
-                        btn.className = 'teal-border-btn';
-                    } else if (item.isStain) {
-                        btn.className = 'stain-btn';
-                    } else {
-                        btn.className = 'process-btn';
-                    }
-                    btn.textContent = item.value;
-                    btn.dataset.value = item.value;
-                    btn.dataset.category = process.category;
-                    btn.dataset.isStain = item.isStain ? 'true' : 'false';
-                    btn.dataset.specialStyle = item.specialStyle || '';
-                    btn.dataset.isExclusive = item.isExclusive ? 'true' : 'false';
-                    btn.addEventListener('click', () => toggleSelect(process.category, item.value, btn));
-                    btnContainer.appendChild(btn);
-                });
-                card.appendChild(btnContainer);
-                if (column1Categories.includes(process.category)) {
-                    column1.appendChild(card);
-                } else if (column2Categories.includes(process.category)) {
-                    column2.appendChild(card);
-                }
-            });
+      } else if ((category === "柔顺" || isDryCategory || isTestCategory) && btn.dataset.isExclusive === "true") {
+        const allButtons = document.querySelectorAll(`button[data-category="${category}"][data-is-exclusive="true"]`);
+        allButtons.forEach(button => {
+          if (button.dataset.value !== value) {
+            const idx = selectedItems[category].indexOf(button.dataset.value);
+            if (idx !== -1) {
+              selectedItems[category].splice(idx, 1);
+            }
+            button.classList.remove('selected-btn');
+          }
+        });
+        const idx = selectedItems[category].indexOf(value);
+        if (idx === -1) {
+          selectedItems[category].push(value);
+          btn.classList.add('selected-btn');
+          btn.classList.add('scale-105');
+          setTimeout(() => btn.classList.remove('scale-105'), 300);
+        } else {
+          selectedItems[category].splice(idx, 1);
+          btn.classList.remove('selected-btn');
         }
-        
-        function toggleSelect(category, value, btn) {
-            const hasEditedContent = resultText.dataset.userEdited === 'true' && resultText.value.trim() !== '';
-            
-            const washCategories = ["洗涤", "洗涤-干洗"];
-            const isWashCategory = washCategories.includes(category);
-            const isExtraOption = extraWashOptions.includes(value);
-            const isDryCategory = category === "干燥";
-            const isTestCategory = testCategories.includes(category);
-            
-            if (isWashCategory && !isExtraOption && value !== "家用机" && btn.dataset.isExclusive === "true") {
-                washCategories.forEach(cat => {
-                    const allButtons = document.querySelectorAll(`button[data-category="${cat}"][data-is-exclusive="true"]`);
-                    allButtons.forEach(button => {
-                        if (!(cat === category && button.dataset.value === value)) {
-                            const idx = selectedItems[cat].indexOf(button.dataset.value);
-                            if (idx !== -1) {
-                                selectedItems[cat].splice(idx, 1);
-                            }
-                            button.classList.remove('selected-btn');
-                        }
-                    });
-                });
-                
-                const idx = selectedItems[category].indexOf(value);
-                if (idx === -1) {
-                    selectedItems[category].push(value);
-                    btn.classList.add('selected-btn');
-                    btn.classList.add('scale-105');
-                    setTimeout(() => btn.classList.remove('scale-105'), 300);
-                } else {
-                    selectedItems[category].splice(idx, 1);
-                    btn.classList.remove('selected-btn');
-                }
-            } else if ((category === "柔顺" || isDryCategory || isTestCategory) && btn.dataset.isExclusive === "true") {
-                const allButtons = document.querySelectorAll(`button[data-category="${category}"][data-is-exclusive="true"]`);
-                allButtons.forEach(button => {
-                    if (button.dataset.value !== value) {
-                        const idx = selectedItems[category].indexOf(button.dataset.value);
-                        if (idx !== -1) {
-                            selectedItems[category].splice(idx, 1);
-                        }
-                        button.classList.remove('selected-btn');
-                    }
-                });
-                const idx = selectedItems[category].indexOf(value);
-                if (idx === -1) {
-                    selectedItems[category].push(value);
-                    btn.classList.add('selected-btn');
-                    btn.classList.add('scale-105');
-                    setTimeout(() => btn.classList.remove('scale-105'), 300);
-                } else {
-                    selectedItems[category].splice(idx, 1);
-                    btn.classList.remove('selected-btn');
-                }
+      } else {
+        const idx = selectedItems[category].indexOf(value);
+        if (idx === -1) {
+          selectedItems[category].push(value);
+          btn.classList.add('selected-btn');
+          btn.classList.add('scale-105');
+          setTimeout(() => btn.classList.remove('scale-105'), 300);
+        } else {
+          selectedItems[category].splice(idx, 1);
+          btn.classList.remove('selected-btn');
+        }
+      }
+
+      if (hasEditedContent) {
+        editTip.classList.remove('hidden');
+        resultText.classList.add('edited-highlight');
+        setTimeout(() => {
+          resultText.classList.remove('edited-highlight');
+        }, 2000);
+      }
+      delete resultText.dataset.quickText;
+      delete resultText.dataset.userEdited;
+      updateResult();
+    }
+
+    function toggleDryWetSelect(value, btn) {
+      const idx = selectedDryWetItems.indexOf(value);
+      if (idx === -1) {
+        selectedDryWetItems.push(value);
+        btn.classList.add('selected-btn');
+        btn.classList.add('scale-105');
+        setTimeout(() => btn.classList.remove('scale-105'), 300);
+      } else {
+        selectedDryWetItems.splice(idx, 1);
+        btn.classList.remove('selected-btn');
+      }
+      updateResult();
+    }
+
+    function toggleWetDrySelect(value, btn) {
+      const idx = selectedWetDryItems.indexOf(value);
+      if (idx === -1) {
+        selectedWetDryItems.push(value);
+        btn.classList.add('selected-btn');
+        btn.classList.add('scale-105');
+        setTimeout(() => btn.classList.remove('scale-105'), 300);
+      } else {
+        selectedWetDryItems.splice(idx, 1);
+        btn.classList.remove('selected-btn');
+      }
+      updateResult();
+    }
+
+    function applyPreset(presetKey) {
+      clearAll();
+      delete resultText.dataset.userEdited;
+      delete resultText.dataset.quickText;
+      presets[presetKey].forEach(value => {
+        processes.forEach(process => {
+          const item = process.items.find(i => i.value === value);
+          if (item) {
+            selectedItems[process.category].push(value);
+            const btn = document.querySelector(`button[data-category="${process.category}"][data-value="${value}"]`);
+            btn && btn.classList.add('selected-btn');
+          }
+        });
+      });
+      editTip.classList.remove('hidden');
+      resultText.classList.add('edited-highlight');
+      setTimeout(() => {
+        resultText.classList.remove('edited-highlight');
+      }, 2000);
+      updateResult();
+    }
+
+    function applyQuickText(textKey) {
+      clearAll();
+      delete resultText.dataset.userEdited;
+      resultText.dataset.quickText = textKey;
+      resultText.value = quickTexts[textKey] || '';
+      charCount.textContent = resultText.value.length;
+      adjustTextareaHeight();
+      const hasContent = resultText.value.length > 0;
+      copyBtn.disabled = !hasContent;
+      clearBtn.disabled = !hasContent;
+      editTip.classList.remove('hidden');
+      resultText.classList.add('edited-highlight');
+      setTimeout(() => {
+        resultText.classList.remove('edited-highlight');
+      }, 2000);
+    }
+
+    function resetPrefixSelection() {
+      currentPrefix = '';
+      mainBodyBtn.classList.remove('bg-primary', 'text-white');
+      mainBodyBtn.classList.add('bg-gray-100', 'text-gray-700');
+      mainBodyBtn.innerHTML = '<i class="fa fa-square-o mr-1"></i> 主体';
+      innerLiningBtn.classList.remove('bg-primary', 'text-white');
+      innerLiningBtn.classList.add('bg-gray-100', 'text-gray-700');
+      innerLiningBtn.innerHTML = '<i class="fa fa-square-o mr-1"></i> 可拆组件';
+    }
+
+    function clearAll() {
+      processes.forEach(process => {
+        selectedItems[process.category] = [];
+        categoryContents[process.category] = "";
+        const buttons = document.querySelectorAll(`button[data-category="${process.category}"]`);
+        buttons.forEach(button => button.classList.remove('selected-btn'));
+      });
+      selectedDryWetItems = [];
+      selectedWetDryItems = [];
+      document.querySelectorAll('.dry-wet-btn, .wet-dry-btn').forEach(btn => {
+        btn.classList.remove('selected-btn');
+      });
+      resetPrefixSelection();
+      updateResult();
+    }
+
+    function adjustTextareaHeight() {
+      const scrollTop = resultText.scrollTop;
+      resultText.style.height = 'auto';
+      const computedStyle = getComputedStyle(resultText);
+      const paddingTop = parseFloat(computedStyle.paddingTop);
+      const paddingBottom = parseFloat(computedStyle.paddingBottom);
+      const lineHeight = parseFloat(computedStyle.lineHeight);
+      let contentHeight = resultText.scrollHeight - paddingTop - paddingBottom;
+      contentHeight = Math.ceil(contentHeight * 1.1);
+      const minHeight = 100;
+      const maxHeight = 400;
+      let finalHeight;
+      if (contentHeight <= minHeight) {
+        finalHeight = minHeight;
+        resultText.style.overflowY = 'hidden';
+      } else if (contentHeight > maxHeight) {
+        finalHeight = maxHeight;
+        resultText.style.overflowY = 'auto';
+      } else {
+        finalHeight = Math.ceil(contentHeight / lineHeight) * lineHeight;
+        resultText.style.overflowY = 'hidden';
+      }
+      resultText.style.height = `${finalHeight}px`;
+      if (scrollTop > 0) {
+        resultText.scrollTop = scrollTop;
+      }
+    }
+
+    function updateResult() {
+      if (resultText.dataset.quickText) return;
+
+      const categoryOrder = ["洗前测试-试剂", "洗前测试-方法", "洗前测试-结果", "洗前保护", "预去渍-水洗", "预去渍-干洗", "洗涤", "洗涤-干洗", "手洗", "柔顺", "干燥", "熨烫"];
+      let peijianShouxi = "";
+
+      categoryOrder.forEach(category => {
+        const items = [];
+        const isHomeMode = category === "洗涤" && selectedItems["洗涤"].includes("家用机");
+
+        selectedItems[category].forEach(selectedValue => {
+          const item = processes.find(p => p.category === category).items.find(i => i.value === selectedValue);
+          if (item) {
+            let fullName = item.fullName;
+            if (selectedValue === "家用机") return;
+            if (isHomeMode && industrialToHomeMap[selectedValue]) {
+              fullName = industrialToHomeMap[selectedValue];
+            }
+            if (selectedValue === "配件手洗") {
+              peijianShouxi = fullName;
             } else {
-                const idx = selectedItems[category].indexOf(value);
-                if (idx === -1) {
-                    selectedItems[category].push(value);
-                    btn.classList.add('selected-btn');
-                    btn.classList.add('scale-105');
-                    setTimeout(() => btn.classList.remove('scale-105'), 300);
-                } else {
-                    selectedItems[category].splice(idx, 1);
-                    btn.classList.remove('selected-btn');
-                }
+              items.push(fullName);
             }
-            
-            if (hasEditedContent) {
-                editTip.classList.remove('hidden');
-                resultText.classList.add('edited-highlight');
-                setTimeout(() => {
-                    resultText.classList.remove('edited-highlight');
-                }, 2000);
-            }
-            
-            delete resultText.dataset.quickText;
-            delete resultText.dataset.userEdited;
-            updateResult();
+          }
+        });
+
+        categoryContents[category] = items.join('，');
+      });
+
+      const testReagent = categoryContents["洗前测试-试剂"];
+      const testMethod = categoryContents["洗前测试-方法"];
+      const testResult = categoryContents["洗前测试-结果"];
+      const hasAnyTest = testReagent || testMethod || testResult;
+      const testComplete = testReagent && testMethod && testResult;
+
+      if (hasAnyTest && !testComplete) {
+        testWarning.classList.remove('hidden');
+      } else {
+        testWarning.classList.add('hidden');
+      }
+
+      let testContent = "";
+      if (testComplete) {
+        testContent = `${testReagent}${testMethod}测试【部位】【*h】${testResult}`;
+      }
+
+      let fullContent = [];
+      if (testContent) {
+        fullContent.push(`洗前测试：${testContent}`);
+      }
+      if (categoryContents["洗前保护"]) {
+        fullContent.push(`洗前保护：${categoryContents["洗前保护"]}`);
+      }
+
+      const preStainContents = [];
+      if (categoryContents["预去渍-水洗"]) preStainContents.push(categoryContents["预去渍-水洗"]);
+      if (categoryContents["预去渍-干洗"]) preStainContents.push(categoryContents["预去渍-干洗"]);
+      if (preStainContents.length > 0) {
+        fullContent.push(`预去渍：${preStainContents.join('，')}`);
+      }
+
+      const washContents = [];
+      if (categoryContents["洗涤"]) washContents.push(categoryContents["洗涤"]);
+      if (categoryContents["洗涤-干洗"]) washContents.push(categoryContents["洗涤-干洗"]);
+      if (categoryContents["手洗"]) washContents.push(categoryContents["手洗"]);
+      if (washContents.length > 0) {
+        fullContent.push(`洗涤：${washContents.join('，')}`);
+      }
+
+      if (categoryContents["柔顺"]) {
+        fullContent.push(`柔顺：${categoryContents["柔顺"]}`);
+      }
+      if (categoryContents["干燥"]) {
+        fullContent.push(`干燥：${categoryContents["干燥"]}`);
+      }
+      if (categoryContents["熨烫"]) {
+        fullContent.push(`熨烫：${categoryContents["熨烫"]}`);
+      }
+
+      let newContent = fullContent.join('；');
+
+      if (peijianShouxi) {
+        newContent = newContent ? `${newContent}；${peijianShouxi}` : peijianShouxi;
+      }
+
+      if (selectedDryWetItems.length > 0) {
+        const dryWetContent = `干转水：${selectedDryWetItems.join('、')}`;
+        newContent = newContent ? `${newContent}；${dryWetContent}` : dryWetContent;
+      }
+
+      if (selectedWetDryItems.length > 0) {
+        const wetDryContent = `与编码【******】为套装衣物，需放在一起检查颜色、手感、气味差异`;
+        newContent = newContent ? `${newContent}；${wetDryContent}` : wetDryContent;
+      }
+
+      if (currentPrefix && newContent) {
+        newContent = `${currentPrefix}：${newContent}`;
+      }
+
+      resultText.value = newContent;
+      charCount.textContent = resultText.value.length;
+      adjustTextareaHeight();
+
+      const hasContent = resultText.value.length > 0;
+      copyBtn.disabled = !hasContent;
+      clearBtn.disabled = !hasContent;
+
+      if (hasContent) {
+        setTimeout(() => {
+          editTip.classList.add('hidden');
+        }, 3000);
+      } else {
+        editTip.classList.add('hidden');
+      }
+    }
+
+    function bindPrefixButtons() {
+      mainBodyBtn.addEventListener('click', () => {
+        if (currentPrefix === '主体') {
+          currentPrefix = '';
+          mainBodyBtn.classList.remove('bg-primary', 'text-white');
+          mainBodyBtn.classList.add('bg-gray-100', 'text-gray-700');
+          mainBodyBtn.innerHTML = '<i class="fa fa-square-o mr-1"></i> 主体';
+        } else {
+          currentPrefix = '主体';
+          mainBodyBtn.classList.remove('bg-gray-100', 'text-gray-700');
+          mainBodyBtn.classList.add('bg-primary', 'text-white');
+          mainBodyBtn.innerHTML = '<i class="fa fa-check-square-o mr-1"></i> 主体';
+          innerLiningBtn.classList.remove('bg-primary', 'text-white');
+          innerLiningBtn.classList.add('bg-gray-100', 'text-gray-700');
+          innerLiningBtn.innerHTML = '<i class="fa fa-square-o mr-1"></i> 可拆组件';
         }
-        
-        function toggleDryWetSelect(value, btn) {
-            const idx = selectedDryWetItems.indexOf(value);
-            if (idx === -1) {
-                selectedDryWetItems.push(value);
-                btn.classList.add('selected-btn');
-                btn.classList.add('scale-105');
-                setTimeout(() => btn.classList.remove('scale-105'), 300);
-            } else {
-                selectedDryWetItems.splice(idx, 1);
-                btn.classList.remove('selected-btn');
-            }
-            updateResult();
+        updateResult();
+      });
+
+      innerLiningBtn.addEventListener('click', () => {
+        if (currentPrefix === '可拆组件') {
+          currentPrefix = '';
+          innerLiningBtn.classList.remove('bg-primary', 'text-white');
+          innerLiningBtn.classList.add('bg-gray-100', 'text-gray-700');
+          innerLiningBtn.innerHTML = '<i class="fa fa-square-o mr-1"></i> 可拆组件';
+        } else {
+          currentPrefix = '可拆组件';
+          innerLiningBtn.classList.remove('bg-gray-100', 'text-gray-700');
+          innerLiningBtn.classList.add('bg-primary', 'text-white');
+          innerLiningBtn.innerHTML = '<i class="fa fa-check-square-o mr-1"></i> 可拆组件';
+          mainBodyBtn.classList.remove('bg-primary', 'text-white');
+          mainBodyBtn.classList.add('bg-gray-100', 'text-gray-700');
+          mainBodyBtn.innerHTML = '<i class="fa fa-square-o mr-1"></i> 主体';
         }
-        
-        function toggleWetDrySelect(value, btn) {
-            const idx = selectedWetDryItems.indexOf(value);
-            if (idx === -1) {
-                selectedWetDryItems.push(value);
-                btn.classList.add('selected-btn');
-                btn.classList.add('scale-105');
-                setTimeout(() => btn.classList.remove('scale-105'), 300);
-            } else {
-                selectedWetDryItems.splice(idx, 1);
-                btn.classList.remove('selected-btn');
-            }
-            updateResult();
+        updateResult();
+      });
+    }
+
+    function bindEvents() {
+      copyBtn.addEventListener('click', () => {
+        resultText.select();
+        document.execCommand('copy');
+        copyMessage.textContent = '复制成功！';
+        copyMessage.className = 'mt-1.5 p-2 rounded-lg text-center text-xs font-medium bg-green-100 text-green-800';
+        setTimeout(() => {
+          copyMessage.className = 'hidden mt-1.5 p-2 rounded-lg text-center text-xs font-medium';
+        }, 1500);
+      });
+
+      clearBtn.addEventListener('click', () => {
+        clearAll();
+        delete resultText.dataset.userEdited;
+        delete resultText.dataset.quickText;
+        resultText.value = '';
+        editTip.classList.add('hidden');
+        adjustTextareaHeight();
+      });
+
+      document.querySelectorAll('.preset-btn[data-preset], .yellow-preset-btn[data-preset], .teal-preset-btn[data-preset]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          applyPreset(btn.dataset.preset);
+        });
+      });
+
+      document.querySelectorAll('.preset-btn[data-quick-text]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          applyQuickText(btn.dataset.quickText);
+        });
+      });
+
+      document.querySelectorAll('.dry-wet-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          toggleDryWetSelect(btn.dataset.dryWet, btn);
+        });
+      });
+
+      document.querySelectorAll('.wet-dry-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          toggleWetDrySelect(btn.dataset.wetDry, btn);
+        });
+      });
+
+      resultText.addEventListener('input', () => {
+        resultText.dataset.userEdited = 'true';
+        charCount.textContent = resultText.value.length;
+        adjustTextareaHeight();
+        const hasContent = resultText.value.length > 0;
+        copyBtn.disabled = !hasContent;
+        clearBtn.disabled = !hasContent;
+        if (hasContent) {
+          editTip.classList.remove('hidden');
+        } else {
+          editTip.classList.add('hidden');
         }
-        
-        function applyPreset(presetKey) {
-            clearAll();
-            delete resultText.dataset.userEdited;
-            delete resultText.dataset.quickText;
-            
-            presets[presetKey].forEach(value => {
-                processes.forEach(process => {
-                    const item = process.items.find(i => i.value === value);
-                    if (item) {
-                        selectedItems[process.category].push(value);
-                        const btn = document.querySelector(`button[data-category="${process.category}"][data-value="${value}"]`);
-                        btn && btn.classList.add('selected-btn');
-                    }
-                });
-            });
-            
-            editTip.classList.remove('hidden');
-            resultText.classList.add('edited-highlight');
-            setTimeout(() => {
-                resultText.classList.remove('edited-highlight');
-            }, 2000);
-            updateResult();
-        }
-        
-        function applyQuickText(textKey) {
-            clearAll();
-            delete resultText.dataset.userEdited;
-            resultText.dataset.quickText = textKey;
-            resultText.value = quickTexts[textKey] || '';
-            charCount.textContent = resultText.value.length;
-            adjustTextareaHeight();
-            const hasContent = resultText.value.length > 0;
-            copyBtn.disabled = !hasContent;
-            clearBtn.disabled = !hasContent;
-            editTip.classList.remove('hidden');
-            resultText.classList.add('edited-highlight');
-            setTimeout(() => {
-                resultText.classList.remove('edited-highlight');
-            }, 2000);
-        }
-        
-        function resetPrefixSelection() {
-            currentPrefix = '';
-            mainBodyBtn.classList.remove('bg-primary', 'text-white');
-            mainBodyBtn.classList.add('bg-gray-100', 'text-gray-700');
-            mainBodyBtn.innerHTML = '<i class="fa fa-square-o mr-1"></i> 主体';
-            innerLiningBtn.classList.remove('bg-primary', 'text-white');
-            innerLiningBtn.classList.add('bg-gray-100', 'text-gray-700');
-            innerLiningBtn.innerHTML = '<i class="fa fa-square-o mr-1"></i> 可拆组件';
-        }
-        
-        function clearAll() {
-            processes.forEach(process => {
-                selectedItems[process.category] = [];
-                categoryContents[process.category] = "";
-                const buttons = document.querySelectorAll(`button[data-category="${process.category}"]`);
-                buttons.forEach(button => button.classList.remove('selected-btn'));
-            });
-            selectedDryWetItems = [];
-            selectedWetDryItems = [];
-            document.querySelectorAll('.dry-wet-btn, .wet-dry-btn').forEach(btn => {
-                btn.classList.remove('selected-btn');
-            });
-            resetPrefixSelection();
-            updateResult();
-        }
-        
-        function adjustTextareaHeight() {
-            const scrollTop = resultText.scrollTop;
-            resultText.style.height = 'auto';
-            const computedStyle = getComputedStyle(resultText);
-            const paddingTop = parseFloat(computedStyle.paddingTop);
-            const paddingBottom = parseFloat(computedStyle.paddingBottom);
-            const lineHeight = parseFloat(computedStyle.lineHeight);
-            let contentHeight = resultText.scrollHeight - paddingTop - paddingBottom;
-            contentHeight = Math.ceil(contentHeight * 1.1);
-            const minHeight = 100;
-            const maxHeight = 400;
-            let finalHeight;
-            if (contentHeight <= minHeight) {
-                finalHeight = minHeight;
-                resultText.style.overflowY = 'hidden';
-            } else if (contentHeight > maxHeight) {
-                finalHeight = maxHeight;
-                resultText.style.overflowY = 'auto';
-            } else {
-                finalHeight = Math.ceil(contentHeight / lineHeight) * lineHeight;
-                resultText.style.overflowY = 'hidden';
-            }
-            resultText.style.height = `${finalHeight}px`;
-            if (scrollTop > 0) {
-                resultText.scrollTop = scrollTop;
-            }
-        }
-        
-        function updateResult() {
-            if (resultText.dataset.quickText) return;
-            
-            const categoryOrder = ["洗前测试-试剂", "洗前测试-方法", "洗前测试-结果", "洗前保护", "预去渍-水洗", "预去渍-干洗", "洗涤", "洗涤-干洗", "手洗", "柔顺", "干燥", "熨烫"];
-            
-            let peijianShouxi = "";
-            
-            categoryOrder.forEach(category => {
-                const items = [];
-                const isHomeMode = category === "洗涤" && selectedItems["洗涤"].includes("家用机");
-                
-                selectedItems[category].forEach(selectedValue => {
-                    const item = processes.find(p => p.category === category).items.find(i => i.value === selectedValue);
-                    if (item) {
-                        let fullName = item.fullName;
-                        if (selectedValue === "家用机") return;
-                        if (isHomeMode && industrialToHomeMap[selectedValue]) {
-                            fullName = industrialToHomeMap[selectedValue];
-                        }
-                        if (selectedValue === "配件手洗") {
-                            peijianShouxi = fullName;
-                        } else {
-                            items.push(fullName);
-                        }
-                    }
-                });
-                categoryContents[category] = items.join('，');
-            });
-            
-            const testReagent = categoryContents["洗前测试-试剂"];
-            const testMethod = categoryContents["洗前测试-方法"];
-            const testResult = categoryContents["洗前测试-结果"];
-            
-            const hasAnyTest = testReagent || testMethod || testResult;
-            const testComplete = testReagent && testMethod && testResult;
-            
-            if (hasAnyTest && !testComplete) {
-                testWarning.classList.remove('hidden');
-            } else {
-                testWarning.classList.add('hidden');
-            }
-            
-            let testContent = "";
-            if (testComplete) {
-                testContent = `${testReagent}${testMethod}测试【部位】【*h】${testResult}`;
-            }
-            
-            let fullContent = [];
-            
-            if (testContent) {
-                fullContent.push(`洗前测试：${testContent}`);
-            }
-            
-            if (categoryContents["洗前保护"]) {
-                fullContent.push(`洗前保护：${categoryContents["洗前保护"]}`);
-            }
-            
-            const preStainContents = [];
-            if (categoryContents["预去渍-水洗"]) preStainContents.push(categoryContents["预去渍-水洗"]);
-            if (categoryContents["预去渍-干洗"]) preStainContents.push(categoryContents["预去渍-干洗"]);
-            if (preStainContents.length > 0) {
-                fullContent.push(`预去渍：${preStainContents.join('，')}`);
-            }
-            
-            const washContents = [];
-            if (categoryContents["洗涤"]) washContents.push(categoryContents["洗涤"]);
-            if (categoryContents["洗涤-干洗"]) washContents.push(categoryContents["洗涤-干洗"]);
-            if (categoryContents["手洗"]) washContents.push(categoryContents["手洗"]);
-            if (washContents.length > 0) {
-                fullContent.push(`洗涤：${washContents.join('，')}`);
-            }
-            
-            if (categoryContents["柔顺"]) {
-                fullContent.push(`柔顺：${categoryContents["柔顺"]}`);
-            }
-            
-            if (categoryContents["干燥"]) {
-                fullContent.push(`干燥：${categoryContents["干燥"]}`);
-            }
-            
-            if (categoryContents["熨烫"]) {
-                fullContent.push(`熨烫：${categoryContents["熨烫"]}`);
-            }
-            
-            let newContent = fullContent.join('；');
-            
-            if (peijianShouxi) {
-                newContent = newContent ? `${newContent}；${peijianShouxi}` : peijianShouxi;
-            }
-            
-            if (selectedDryWetItems.length > 0) {
-                const dryWetContent = `干转水：${selectedDryWetItems.join('、')}`;
-                newContent = newContent ? `${newContent}；${dryWetContent}` : dryWetContent;
-            }
-            
-            if (selectedWetDryItems.length > 0) {
-                const wetDryContent = `与编码【******】为套装衣物，需放在一起检查颜色、手感、气味差异`;
-                newContent = newContent ? `${newContent}；${wetDryContent}` : wetDryContent;
-            }
-            
-            if (currentPrefix && newContent) {
-                newContent = `${currentPrefix}：${newContent}`;
-            }
-            
-            resultText.value = newContent;
-            charCount.textContent = resultText.value.length;
-            adjustTextareaHeight();
-            const hasContent = resultText.value.length > 0;
-            copyBtn.disabled = !hasContent;
-            clearBtn.disabled = !hasContent;
-            if (hasContent) {
-                setTimeout(() => {
-                    editTip.classList.add('hidden');
-                }, 3000);
-            } else {
-                editTip.classList.add('hidden');
-            }
-        }
-        
-        function bindPrefixButtons() {
-            mainBodyBtn.addEventListener('click', () => {
-                if (currentPrefix === '主体') {
-                    currentPrefix = '';
-                    mainBodyBtn.classList.remove('bg-primary', 'text-white');
-                    mainBodyBtn.classList.add('bg-gray-100', 'text-gray-700');
-                    mainBodyBtn.innerHTML = '<i class="fa fa-square-o mr-1"></i> 主体';
-                } else {
-                    currentPrefix = '主体';
-                    mainBodyBtn.classList.remove('bg-gray-100', 'text-gray-700');
-                    mainBodyBtn.classList.add('bg-primary', 'text-white');
-                    mainBodyBtn.innerHTML = '<i class="fa fa-check-square-o mr-1"></i> 主体';
-                    innerLiningBtn.classList.remove('bg-primary', 'text-white');
-                    innerLiningBtn.classList.add('bg-gray-100', 'text-gray-700');
-                    innerLiningBtn.innerHTML = '<i class="fa fa-square-o mr-1"></i> 可拆组件';
-                }
-                updateResult();
-            });
-            
-            innerLiningBtn.addEventListener('click', () => {
-                if (currentPrefix === '可拆组件') {
-                    currentPrefix = '';
-                    innerLiningBtn.classList.remove('bg-primary', 'text-white');
-                    innerLiningBtn.classList.add('bg-gray-100', 'text-gray-700');
-                    innerLiningBtn.innerHTML = '<i class="fa fa-square-o mr-1"></i> 可拆组件';
-                } else {
-                    currentPrefix = '可拆组件';
-                    innerLiningBtn.classList.remove('bg-gray-100', 'text-gray-700');
-                    innerLiningBtn.classList.add('bg-primary', 'text-white');
-                    innerLiningBtn.innerHTML = '<i class="fa fa-check-square-o mr-1"></i> 可拆组件';
-                    mainBodyBtn.classList.remove('bg-primary', 'text-white');
-                    mainBodyBtn.classList.add('bg-gray-100', 'text-gray-700');
-                    mainBodyBtn.innerHTML = '<i class="fa fa-square-o mr-1"></i> 主体';
-                }
-                updateResult();
-            });
-        }
-        
-        function bindEvents() {
-            copyBtn.addEventListener('click', () => {
-                resultText.select();
-                document.execCommand('copy');
-                copyMessage.textContent = '复制成功！';
-                copyMessage.className = 'mt-1.5 p-2 rounded-lg text-center text-xs font-medium bg-green-100 text-green-800';
-                setTimeout(() => {
-                    copyMessage.className = 'hidden mt-1.5 p-2 rounded-lg text-center text-xs font-medium';
-                }, 1500);
-            });
-            clearBtn.addEventListener('click', () => {
-                clearAll();
-                delete resultText.dataset.userEdited;
-                delete resultText.dataset.quickText;
-                resultText.value = '';
-                editTip.classList.add('hidden');
-                adjustTextareaHeight();
-            });
-            document.querySelectorAll('.preset-btn[data-preset], .yellow-preset-btn[data-preset], .teal-preset-btn[data-preset]').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    applyPreset(btn.dataset.preset);
-                });
-            });
-            document.querySelectorAll('.preset-btn[data-quick-text]').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    applyQuickText(btn.dataset.quickText);
-                });
-            });
-            document.querySelectorAll('.dry-wet-btn').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    toggleDryWetSelect(btn.dataset.dryWet, btn);
-                });
-            });
-            document.querySelectorAll('.wet-dry-btn').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    toggleWetDrySelect(btn.dataset.wetDry, btn);
-                });
-            });
-            resultText.addEventListener('input', () => {
-                resultText.dataset.userEdited = 'true';
-                charCount.textContent = resultText.value.length;
-                adjustTextareaHeight();
-                const hasContent = resultText.value.length > 0;
-                copyBtn.disabled = !hasContent;
-                clearBtn.disabled = !hasContent;
-                if (hasContent) {
-                    editTip.classList.remove('hidden');
-                } else {
-                    editTip.classList.add('hidden');
-                }
-            });
-            window.addEventListener('resize', () => {
-                adjustTextareaHeight();
-            });
-            bindPrefixButtons();
-        }
-    </script>
+      });
+
+      window.addEventListener('resize', () => {
+        adjustTextareaHeight();
+      });
+
+      bindPrefixButtons();
+    }
+  </script>
 </body>
 </html>
